@@ -249,6 +249,15 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
 .photo.base img{max-width:300px}
 .photo figcaption{font-size:.88rem;color:var(--muted);text-align:center;max-width:44ch;text-wrap:balance}
 
+/* kit accessories */
+.acc-fig{position:relative;width:min(100%, 460px);margin-inline:auto;border:2px solid var(--edge);border-radius:18px;overflow:hidden}
+.acc-fig img{display:block;width:100%;height:auto}
+.missing{background:var(--warn-bg);border:2px solid var(--warn);border-radius:14px;padding:12px 14px}
+.sub-h{margin-top:10px}
+.kit-tag{display:inline-block;font-size:.72rem;font-weight:800;line-height:1;border-radius:999px;padding:4px 8px;margin-right:8px;vertical-align:2px}
+.kit-tag.in{background:var(--lime);color:var(--on-lime)}
+.kit-tag.out{background:var(--board);color:var(--muted);border:1.5px solid var(--line)}
+
 /* sheets */
 .sheet{background:var(--sheet);border:1.5px solid var(--line);border-radius:22px;padding:22px 18px;display:grid;gap:14px}
 .sub{color:var(--muted)}
@@ -623,30 +632,42 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
 
   <section class="sheet" id="bits" aria-labelledby="bitsTitle">
     <div class="sheet-head">
-      <p class="kicker">ביטים</p>
-      <h2 id="bitsTitle">איזה ראש יש לבורג?</h2>
-      <p class="sub">ביט בגודל הנכון הוא ההבדל בין בורג שנכנס חלק לבורג עם ראש הרוס.</p>
+      <p class="kicker">ביטים וראשים</p>
+      <h2 id="bitsTitle">מה יש בערכה</h2>
+      <p class="sub">20 חלקים, ועוד המטען. לחצו על מספר בתמונה.</p>
     </div>
+    <div class="acc-fig" id="accFig">
+      <img src="img/accessories.jpg" width="645" height="520" loading="lazy" decoding="async" alt="הביטים והראשים שבערכה: 10 ביטים קצרים בפס עם קרבינר, 2 ביטים ארוכים, 5 ראשי בוקסה, 3 מתאמים לבוקסות, והמטען">
+    </div>
+    <div class="part-info" aria-live="polite">
+      <p class="part-name"><span class="num" id="accNum">1</span><span id="accName">10 ביטים קצרים</span></p>
+      <p id="accText">שלושה שטוחים, לברגים עם חריץ ישר, ושבעה מצולבים: פיליפס (PH) ופוזידרייב (PZ). המספר שעל הביט הוא הגודל: 1 לברגים קטנים, 2 לרוב הברגים בבית, 3 לגדולים. כולם יושבים בפס עם קרבינר, שאפשר לתלות על החגורה.</p>
+    </div>
+    <div class="chips" id="accChips" role="group" aria-label="החלקים שבערכה"></div>
+    <p class="missing"><b>מה אין בערכה:</b> ביטי טורקס (כוכב), ביטי אלן (משושה) ומקדחים. לברגי דק, לרהיטים להרכבה עצמית ולקידוח קונים אותם בנפרד, עם זנב משושה של 1/4 אינץ׳.</p>
+    <p class="note">התמונה מדף המוצר.</p>
+    <h3 class="sub-h">איזה ראש יש לבורג?</h3>
+    <p class="sub">ביט בגודל הנכון הוא ההבדל בין בורג שנכנס חלק לבורג עם ראש הרוס.</p>
     <ul class="heads">
       <li>
         <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><path class="recess" d="M22 9 L24.6 19.4 L35 22 L24.6 24.6 L22 35 L19.4 24.6 L9 22 L19.4 19.4 Z"/></svg>
-        <div><p class="head-name">פיליפס<span class="head-code" dir="ltr">PH</span></p><p class="head-text">צלב. הכי נפוץ בבית, וביט PH2 מתאים לרוב הברגים.</p></div>
+        <div><p class="head-name">פיליפס<span class="head-code" dir="ltr">PH</span><span class="kit-tag in">בערכה</span></p><p class="head-text">צלב. הכי נפוץ בבית, וביט PH2 מתאים לרוב הברגים.</p></div>
       </li>
       <li>
         <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><path class="recess" d="M22 9 L24.6 19.4 L35 22 L24.6 24.6 L22 35 L19.4 24.6 L9 22 L19.4 19.4 Z"/><path class="recess-line" d="M14.5 14.5 L18 18 M29.5 14.5 L26 18 M14.5 29.5 L18 26 M29.5 29.5 L26 26"/></svg>
-        <div><p class="head-name">פוזידרייב<span class="head-code" dir="ltr">PZ</span></p><p class="head-text">צלב עם קווים דקים בין הזרועות. נפוץ ברהיטים, וביט PH מחליק עליו.</p></div>
+        <div><p class="head-name">פוזידרייב<span class="head-code" dir="ltr">PZ</span><span class="kit-tag in">בערכה</span></p><p class="head-text">צלב עם קווים דקים בין הזרועות. נפוץ ברהיטים, וביט PH מחליק עליו.</p></div>
       </li>
       <li>
         <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><polygon class="torx" points="22,11 25.25,16.37 31.53,16.5 28.5,22 31.53,27.5 25.25,27.63 22,33 18.75,27.63 12.47,27.5 15.5,22 12.47,16.5 18.75,16.37"/></svg>
-        <div><p class="head-name">טורקס<span class="head-code" dir="ltr">TX</span></p><p class="head-text">כוכב עם שישה קצוות. בברגי דק ובברגים חזקים. כמעט לא מחליק.</p></div>
+        <div><p class="head-name">טורקס<span class="head-code" dir="ltr">TX</span><span class="kit-tag out">אין בערכה</span></p><p class="head-text">כוכב עם שישה קצוות. בברגי דק ובברגים חזקים. כמעט לא מחליק.</p></div>
       </li>
       <li>
         <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><polygon class="recess" points="31,22 26.5,29.8 17.5,29.8 13,22 17.5,14.2 26.5,14.2"/></svg>
-        <div><p class="head-name">אלן, משושה<span class="head-code" dir="ltr">HEX</span></p><p class="head-text">חור משושה. ברהיטים להרכבה עצמית. רק במידה המדויקת.</p></div>
+        <div><p class="head-name">אלן, משושה<span class="head-code" dir="ltr">HEX</span><span class="kit-tag out">אין בערכה</span></p><p class="head-text">חור משושה. ברהיטים להרכבה עצמית. רק במידה המדויקת.</p></div>
       </li>
       <li>
         <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><rect class="recess" x="9" y="19.5" width="26" height="5" rx="1.5"/></svg>
-        <div><p class="head-name">שטוח<span class="head-code" dir="ltr">SL</span></p><p class="head-text">חריץ אחד. מחליק בקלות, עדיף להבריג ביד.</p></div>
+        <div><p class="head-name">שטוח<span class="head-code" dir="ltr">SL</span><span class="kit-tag in">בערכה</span></p><p class="head-text">חריץ אחד. מחליק בקלות, עדיף להבריג ביד.</p></div>
       </li>
     </ul>
     <div class="tipbox">
@@ -670,11 +691,11 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       </details>
       <details>
         <summary>מה עושה הכפתור <bdi dir="ltr">SCENES</bdi>?</summary>
-        <div class="ans"><p>הוא מפעיל מצבי עבודה נוספים, והפירוט שלהם נמצא בחוברת שבקופסה. לעבודה רגילה מספיק <bdi dir="ltr">SPEED MODE</bdi>.</p></div>
+        <div class="ans"><p>הוא מחליף בין מצבי עבודה מוכנים, והסמלים שליד הנוריות (A וכמה סוגי ברגים) מראים איזה מצב נבחר. דף המוצר מפרט אחד מהם, מצב נגד העפה: בשחרור, ברגע שהבורג משתחרר, המהירות יורדת ל-800 סל״ד, כדי שהבורג לא יעוף.</p></div>
       </details>
       <details>
         <summary>בשחרור היא פתאום מאטה</summary>
-        <div class="ans"><p>זה מכוון. במצב שחרור המברגה מאטה לבד ברגע שהבורג משתחרר, כדי שהבורג או האום לא יעופו.</p></div>
+        <div class="ans"><p>זה מכוון. במצב נגד העפה המברגה יורדת ל-800 סל״ד ברגע שהבורג משתחרר, כדי שהבורג או האום לא יעופו.</p></div>
       </details>
       <details>
         <summary>לוחצים על ההדק ולא קורה כלום</summary>
@@ -798,7 +819,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
     stripped: "ראש הבורג נהרס. זה מה שקורה כשממשיכים ללחוץ. נסו בורג חדש.",
     revImpact: "בהתחלה הבורג תקוע, אז הפטיש עובד גם בשחרור.",
     revFree: "השתחרר. עכשיו המברגה מאטה לבד, כדי שהבורג לא יעוף.",
-    scenes: "SCENES מפעיל מצבי עבודה נוספים, והפירוט שלהם בחוברת שבקופסה. לעבודה רגילה מספיק SPEED MODE.",
+    scenes: "SCENES מחליף בין מצבי עבודה מוכנים, והסמלים שליד הנוריות מראים איזה מצב נבחר. אחד מהם הוא מצב נגד העפה: בשחרור, ברגע שהבורג משתחרר, המהירות יורדת ל-800 סל״ד כדי שלא יעוף.",
     out: "הבורג בחוץ. אפשר לעבור להברגה."
   };
   var TONE = { stop: "bad", stripped: "bad", lock: "warn" };
@@ -1040,7 +1061,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
     { name: "פנס LED", text: "נדלק יחד עם ההדק ומאיר את הבורג. אין לו כפתור משלו. שימושי בתוך ארונות ובפינות חשוכות.", a: [216, 154], p: [180, 174] },
     { name: "מתג כיוון", text: "לחיצה מצד אחד מבריגה, מהצד השני משחררת, ובמצב האמצעי ההדק נעול. לא בטוחים לאיזה צד? לחיצה קצרה באוויר, ומסתכלים לאן הביט מסתובב. בשחרור המברגה מאטה לבד כשהבורג משתחרר, כדי שלא יעוף.", a: [274, 165], p: [320, 190] },
     { name: "הדק", text: "ככל שלוחצים עמוק יותר, הוא מסתובב מהר יותר, עד המהירות שנבחרה. בתחילת בורג לוחצים בעדינות.", a: [226, 196], p: [186, 214] },
-    { name: "לוח המהירויות", text: "על הבסיס, מלפנים. כל לחיצה על SPEED MODE עוברת למהירות הבאה, והנוריות שבאמצע מראות איזו נבחרה. הכפתור השני, SCENES, מפעיל מצבי עבודה נוספים, והפירוט שלהם בחוברת שבקופסה.", a: [236, 268], p: [196, 252] },
+    { name: "לוח המהירויות", text: "על הבסיס, מלפנים. כל לחיצה על SPEED MODE עוברת למהירות הבאה, והנוריות שבאמצע מראות איזו נבחרה. הכפתור השני, SCENES, מחליף בין מצבי עבודה מוכנים, וליד הנוריות מודפסים הסמלים שלהם.", a: [236, 268], p: [196, 252] },
     { name: "סוללה ומד טעינה", text: "סוללת ליתיום, 21V ו-2.0Ah, ובערכה יש שתיים. לחיצה על הכפתור שבחזית הסוללה מדליקה ארבעה פסים שמראים כמה טעינה נשארה. התקע העגול של המטען נכנס לשקע הטעינה שבסוללה.", a: [246, 311], p: [252, 346] },
     { name: "תפס הסוללה", text: "לוחצים עליו ומחליקים את הסוללה החוצה. מכניסים בחזרה עד שנשמע קליק.", a: [223, 292], p: [184, 296] }
   ];
@@ -1066,7 +1087,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
     partChips.appendChild(chip);
   });
   function selectPart(n){
-    $$(".pin, #partChips .chip").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-part") === n)); });
+    $$("#partsFig .pin, #partChips .chip").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-part") === n)); });
     $$(".leader, .anchor", partsSvg).forEach(function(el){ el.classList.toggle("on", +el.getAttribute("data-part") === n); });
     var p = PARTS[n - 1];
     $("#partNum").textContent = n;
@@ -1075,19 +1096,53 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
   }
   selectPart(1);
 
+  /* ---------- kit accessories ---------- */
+  var ACC = [
+    { name: "10 ביטים קצרים", p: [66, 38], text: "שלושה שטוחים, לברגים עם חריץ ישר, ושבעה מצולבים: פיליפס (PH) ופוזידרייב (PZ). המספר שעל הביט הוא הגודל: 1 לברגים קטנים, 2 לרוב הברגים בבית, 3 לגדולים. כולם יושבים בפס עם קרבינר, שאפשר לתלות על החגורה." },
+    { name: "2 ביטים ארוכים", p: [6, 58], text: "פיליפס PH2 באורך 9 ס״מ. לבורג שנמצא עמוק או במקום צר, שהמברגה עצמה לא מגיעה אליו. ביט ארוך רועד יותר, אז עובדים איתו במהירות נמוכה." },
+    { name: "5 ראשי בוקסה", p: [20, 42], text: "לברגים עם ראש משושה ולאומים. הגודל כתוב על כל ראש, באינץ׳: 1/4, 5/16, 3/8, 7/16 ו-1/2. בארץ רוב האומים במילימטרים, אז קודם בודקים שהראש יושב על האום בלי משחק, ורק אז מהדקים." },
+    { name: "3 מתאמים לבוקסות", p: [26, 72], text: "מצד אחד זנב משושה שנכנס למברגה, ומהצד השני ריבוע שעליו מלבישים בוקסה רגילה מסט מפתחות. יש שלושה גדלים של ריבוע, לפי הבוקסה. בוקסות כרום רגילות לא בנויות למכות של אימפקט, ולעבודה כבדה עדיף בוקסות אימפקט שחורות." },
+    { name: "מטען", p: [55, 80], text: "תקע אמריקאי, וכבל שנגמר בתקע עגול שנכנס לשקע הטעינה שבסוללה. לפני החיבור הראשון בודקים מה כתוב ליד INPUT (צעד 1 בתחילת העמוד)." }
+  ];
+  var accFig = $("#accFig"), accChips = $("#accChips");
+  ACC.forEach(function(a, i){
+    var n = i + 1;
+    var pin = document.createElement("button");
+    pin.type = "button"; pin.className = "pin"; pin.textContent = n;
+    pin.setAttribute("data-acc", n);
+    pin.setAttribute("aria-label", n + ": " + a.name);
+    pin.style.left = a.p[0] + "%";
+    pin.style.top = a.p[1] + "%";
+    pin.addEventListener("click", function(){ selectAcc(n); });
+    accFig.appendChild(pin);
+    var chip = document.createElement("button");
+    chip.type = "button"; chip.className = "chip"; chip.textContent = n + " · " + a.name;
+    chip.setAttribute("data-acc", n);
+    chip.addEventListener("click", function(){ selectAcc(n); });
+    accChips.appendChild(chip);
+  });
+  function selectAcc(n){
+    $$("[data-acc]").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-acc") === n)); });
+    var a = ACC[n - 1];
+    $("#accNum").textContent = n;
+    $("#accName").textContent = a.name;
+    $("#accText").textContent = a.text;
+  }
+  selectAcc(1);
+
   /* ---------- which speed for which job ---------- */
   var TASKS = {
-    furniture: { speed: 1, dir: "fwd", bit: "לפי הבורג. ברוב הרהיטים: פיליפס PH2 או אלן (משושה).",
+    furniture: { speed: 1, dir: "fwd", bit: "לפי הבורג. ברוב הרהיטים: פיליפס PH2 (יש בערכה) או אלן משושה (אין בערכה).",
       tips: ["לוח סיבית נהרס מהר. מבריגים כמעט עד הסוף, ואת הסיבוב האחרון עושים ביד.", "ברגים קטנים או בפלסטיק: לחיצה עדינה מאוד על ההדק."] },
     wall: { speed: 1, dir: "fwd", bit: "לרוב פיליפס PH2, לפי הבורג שמגיע עם הדיבל.",
       tips: ["בקיר בטון או בלוקים את החור קודחים עם מקדחה רוטטת. האימפקט לא קודח בבטון.", "מכניסים דיבל, ואז את הבורג בעדינות, כדי שהדיבל לא יסתובב בתוך החור.", "לפני שקודחים: מוודאים שאין בקו של הנקודה חשמל או צנרת, במיוחד מעל ומתחת לשקעים ולמפסקים."] },
-    wood: { speed: 2, dir: "fwd", bit: "פיליפס PH2, פוזידרייב PZ2 או טורקס, לפי הראש של הבורג.",
+    wood: { speed: 2, dir: "fwd", bit: "פיליפס PH2 או פוזידרייב PZ2 מהערכה, לפי הראש של הבורג. לבורג עם כוכב צריך טורקס, שאין בערכה.",
       tips: ["מתחילים בלחיצה עדינה עד שהבורג תופס, ואז מגבירים.", "בעץ קשה או קרוב לקצה: קודם קודחים חור מוביל דק, כדי שהעץ לא ייסדק."] },
-    long: { speed: 4, dir: "fwd", bit: "בדרך כלל טורקס (כוכב), לפי הבורג.",
+    long: { speed: 4, dir: "fwd", bit: "בדרך כלל טורקס (כוכב), שאין בערכה. לבורג פיליפס: PH2 מהערכה.",
       tips: ["כאן האימפקט בשיא שלו. דוחפים חזק פנימה, בקו ישר עם הבורג.", "אם הבורג נעצר באמצע, חור מוביל יעזור יותר מעוד כוח."] },
     stuck: { speed: 4, dir: "rev", bit: "ביט חדש, בגודל המדויק של הראש.",
       tips: ["זה הצד החזק של אימפקט: המכות משחררות מה שיד לא מזיזה.", "דוחפים חזק פנימה, ורק אז לוחצים על ההדק.", "ראש שכבר התעגל לא מנסים שוב. משחררים אותו עם מחלץ ברגים."] },
-    drill: { speed: 3, dir: "fwd", bit: "מקדח עם זנב משושה של 1/4 אינץ׳. מקדח עם זנב עגול לא ייכנס.",
+    drill: { speed: 3, dir: "fwd", bit: "מקדח עם זנב משושה של 1/4 אינץ׳ (אין בערכה). מקדח עם זנב עגול לא ייכנס.",
       tips: ["מתחילים לאט כדי שהמקדח לא יחליק, ואז מגבירים.", "בטון, בלוקים ואריחים: רק מקדחה רוטטת."] }
   };
   var DIRNAME = { fwd: "הברגה", rev: "שחרור" };
