@@ -1,0 +1,1144 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>המברגה הירוקה</title>
+<meta name="description" content="מדריך שימוש אינטראקטיבי למברגת האימפקט Robustrue DR12 Pro, עם סימולטור הברגה, מפת חלקים, מהירות לכל עבודה ותקלות נפוצות.">
+<meta name="theme-color" content="#ECEEE6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141712" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:site_name" content="המברגה הירוקה">
+<meta property="og:title" content="המברגה הירוקה">
+<meta property="og:description" content="מדריך שימוש אינטראקטיבי למברגת האימפקט Robustrue DR12 Pro: סימולטור, חלקים, מהירויות, ביטים ותקלות.">
+<meta property="og:url" content="https://orisamuel.github.io/green-driver/">
+<meta property="og:image" content="https://orisamuel.github.io/green-driver/og.jpg?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one phone-width column of sheets hung on a pegboard; the simulator is the workbench at the top. */
+:root{
+  --board:#ECEEE6;
+  --hole:rgba(46,56,36,.13);
+  --sheet:#FFFFFF;
+  --ink:#1C2019;
+  --muted:#59624F;
+  --line:#D7DBCD;
+  --edge:#1C2019;
+  --on-lime:#1C2019;
+  --lime:#9BD62F;
+  --lime-ink:#3D6908;
+  --mark:#C4EC7E;
+  --stage:#DCEEC0;
+  --tool:#23272B;
+  --tool-hi:#434B52;
+  --steel:#BCC3C9;
+  --steel-hi:#E6EAED;
+  --steel-dark:#7E878F;
+  --wood:#EBCB93;
+  --wood-dark:#C3924F;
+  --shadow:rgba(28,32,25,.16);
+  --led-on:#FFF4B8;
+  --beam:#FFE27A;
+  --good:#2E6B0B;
+  --good-bg:#EBF7DD;
+  --warn:#A84800;
+  --warn-bg:#FFF1E3;
+  --bad:#B42318;
+  --bad-bg:#FDECEA;
+  --focus:#2563EB;
+  --leader:#1C2019;
+  --red:#E3342B;
+  --on-red:#FFFFFF;
+  --panel-ink:#D9DEE2;
+  --led-off:#4A5259;
+  --f-display:"Fredoka","Assistant",system-ui,sans-serif;
+  --f-body:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --board:#141712; --hole:rgba(255,255,255,.05); --sheet:#1E231B; --ink:#ECF0E6; --muted:#A2AC98;
+    --line:#333B2D; --edge:#050604; --lime:#A6E23A; --lime-ink:#B9EE63; --mark:rgba(166,226,58,.38);
+    --stage:#273120; --tool:#1A1D20; --tool-hi:#3F474E; --steel:#AFB7BE; --steel-hi:#D9DFE3;
+    --steel-dark:#6C757D; --wood:#CDA066; --wood-dark:#93693A; --shadow:rgba(0,0,0,.45);
+    --good:#9BE36A; --good-bg:#22351A; --warn:#FFB066; --warn-bg:#3A2715; --bad:#FF8A80; --bad-bg:#3D1C1A;
+    --focus:#7FA8FF; --leader:#A2AC98; --red:#EF4F45; --panel-ink:#C9D0D6; --led-off:#3B4249;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --board:#141712; --hole:rgba(255,255,255,.05); --sheet:#1E231B; --ink:#ECF0E6; --muted:#A2AC98;
+  --line:#333B2D; --edge:#050604; --lime:#A6E23A; --lime-ink:#B9EE63; --mark:rgba(166,226,58,.38);
+  --stage:#273120; --tool:#1A1D20; --tool-hi:#3F474E; --steel:#AFB7BE; --steel-hi:#D9DFE3;
+  --steel-dark:#6C757D; --wood:#CDA066; --wood-dark:#93693A; --shadow:rgba(0,0,0,.45);
+  --good:#9BE36A; --good-bg:#22351A; --warn:#FFB066; --warn-bg:#3A2715; --bad:#FF8A80; --bad-bg:#3D1C1A;
+  --focus:#7FA8FF; --leader:#A2AC98; --red:#EF4F45; --panel-ink:#C9D0D6; --led-off:#3B4249;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{
+  background-color:var(--board);
+  background-image:radial-gradient(circle, var(--hole) 0 2.4px, transparent 3px);
+  background-size:26px 26px;
+  background-position:13px 13px;
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.6;
+  -webkit-tap-highlight-color:transparent;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--board)}
+.app{min-height:100%}
+.wrap{
+  width:100%;
+  max-width:600px;
+  margin-inline:auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.6rem, 12vw, 3.5rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.75rem;font-weight:600}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+a{color:var(--lime-ink);font-weight:700;text-underline-offset:3px}
+b,strong{font-weight:800}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;opacity:0}
+
+/* top nav */
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--board);border-bottom:1.5px solid var(--line)}
+.navrow{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.navrow::-webkit-scrollbar{display:none}
+.navrow a{flex:none;text-decoration:none;color:var(--ink);font-size:.95rem;font-weight:700;line-height:1;padding:8px 14px;border:2px solid var(--edge);border-radius:999px;background:var(--sheet)}
+.navrow a:active{background:var(--lime);color:var(--on-lime)}
+
+main{display:grid;gap:18px;padding-block:4px 28px}
+section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
+
+/* hero */
+.hero{display:grid;gap:8px;padding-block:22px 6px}
+.eyebrow{font-family:var(--f-mono);font-size:.82rem;font-weight:600;letter-spacing:.06em;color:var(--lime-ink)}
+.hl{background:linear-gradient(transparent 60%, var(--mark) 60% 90%, transparent 90%);padding-inline:2px}
+.lead{font-size:1.15rem;color:var(--muted);max-width:34ch}
+
+/* simulator */
+.sim{background:var(--sheet);border:2px solid var(--edge);border-radius:24px;box-shadow:0 6px 0 var(--edge);overflow:hidden}
+.stage{position:relative;background:var(--stage);border-bottom:2px solid var(--edge);user-select:none;-webkit-user-select:none}
+.stage-inner{position:relative;width:min(100%, 460px);margin-inline:auto}
+.stage svg{display:block;width:100%;height:auto}
+.tag{position:absolute;top:12px;right:12px;z-index:2;font-size:.82rem;font-weight:800;line-height:1.3;color:var(--on-lime);background:var(--lime);border:2px solid var(--edge);border-radius:8px;padding:2px 8px}
+.sim-body{display:grid;gap:14px;padding:14px 16px 18px}
+.sim-status{font-weight:700;font-size:1.02rem;min-height:3.2em}
+.sim-status[data-tone="bad"]{color:var(--bad)}
+.sim-status[data-tone="warn"]{color:var(--warn)}
+.ctl{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 12px}
+.ctl-label{font-weight:700;color:var(--muted);min-width:3.6em}
+.readout{grid-column:2;font-size:.9rem;color:var(--muted)}
+.nw{white-space:nowrap}
+.readout b{font-family:var(--f-mono);font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.seg{display:flex;min-width:0;border:2px solid var(--edge);border-radius:14px;overflow:hidden;background:var(--sheet)}
+.seg button{flex:1 1 0;min-width:0;appearance:none;-webkit-appearance:none;border:0;background:transparent;color:var(--ink);font-size:1rem;font-weight:700;line-height:1.25;padding:11px 6px;cursor:pointer}
+.seg button + button{border-inline-start:2px solid var(--edge)}
+.seg button[aria-pressed="true"]{background:var(--lime);color:var(--on-lime)}
+.seg button:focus-visible{outline-offset:-4px}
+.trigger{position:relative;width:100%;appearance:none;-webkit-appearance:none;display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;padding:14px;border:2px solid var(--edge);border-radius:18px;background:var(--lime);color:var(--on-lime);font-family:var(--f-display);font-size:1.2rem;font-weight:700;box-shadow:0 5px 0 var(--edge);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .06s, box-shadow .06s}
+.trigger.is-down{transform:translateY(4px);box-shadow:0 1px 0 var(--edge)}
+.trigger.hint::after{content:"";position:absolute;inset:-6px;border-radius:22px;border:2px solid var(--lime-ink);animation:ring 1.6s ease-out infinite;pointer-events:none}
+.sim-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+.ghost{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:8px;border:2px solid var(--edge);background:var(--sheet);color:var(--ink);border-radius:12px;padding:8px 14px;font-size:.95rem;font-weight:700;line-height:1.2;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.ghost:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.ghost svg{flex:none}
+#soundBtn[aria-pressed="false"] .waves{display:none}
+#soundBtn[aria-pressed="true"] .mute{display:none}
+
+/* drawing */
+.tool{fill:var(--tool);stroke:var(--edge);stroke-width:2.5;stroke-linejoin:round}
+.lime-part{fill:var(--lime);stroke:var(--edge);stroke-width:2.5;stroke-linejoin:round}
+.steel-part{fill:var(--steel);stroke:var(--edge);stroke-width:2;stroke-linejoin:round}
+.grip{fill:var(--tool)}
+.hi{fill:var(--tool-hi);stroke:var(--steel);stroke-width:1.5}
+.bars rect{fill:var(--lime)}
+.cap{fill:var(--steel);font-family:var(--f-mono);font-size:10px;font-weight:600}
+.badge{fill:var(--lime);font-family:var(--f-display);font-size:19px;font-weight:700}
+.vents,.slits{fill:none;stroke:var(--tool);stroke-width:4;stroke-linecap:round}
+.slits{stroke-width:3.5}
+.shine,.knurl{fill:none;stroke:var(--tool-hi);stroke-linecap:round}
+.shine{stroke-width:3}
+.knurl{stroke-width:2}
+.facet{fill:var(--steel)}
+.facet.f1{fill:var(--steel-hi)}
+.facet.f3{fill:var(--steel-dark)}
+.bit-outline{fill:none;stroke:var(--edge);stroke-width:2}
+.led{fill:var(--steel);stroke:var(--edge);stroke-width:2;transition:fill .1s}
+.shadow{fill:var(--shadow)}
+.plank rect{fill:var(--wood);stroke:var(--edge);stroke-width:2.5}
+.grain{fill:none;stroke:var(--wood-dark);stroke-width:2;stroke-linecap:round}
+.threads path{stroke:var(--steel-dark);stroke-width:1.6;stroke-linecap:round}
+.screw-line{fill:none;stroke:var(--edge);stroke-width:2;stroke-linejoin:round}
+.arc{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:10 8;opacity:0;transition:opacity .12s}
+.beam{fill:var(--beam);opacity:0;transition:opacity .12s}
+.sparks{fill:none;stroke:var(--warn);stroke-width:2.5;stroke-linecap:round;opacity:0}
+.dirbtn.flash{animation:flash .9s ease-out}
+
+.stage.is-on .led{fill:var(--led-on)}
+.stage.is-on .beam{opacity:.5}
+.stage.is-spin .arc{opacity:.8;animation:dash calc(var(--rot, .42s) * var(--rot-k, 1) * 2) linear infinite}
+.stage.is-spin .facet{animation:facet calc(var(--rot, .42s) * var(--rot-k, 1)) linear infinite}
+.stage.is-spin .facet.f2{animation-delay:calc(var(--rot, .42s) * var(--rot-k, 1) * -0.333)}
+.stage.is-spin .facet.f3{animation-delay:calc(var(--rot, .42s) * var(--rot-k, 1) * -0.666)}
+.stage.is-spin .threads{animation:thread calc(var(--rot, .42s) * var(--rot-k, 1)) linear infinite}
+.stage.is-slow{--rot-k:2.4}
+.stage.is-spin.is-rev .facet,.stage.is-spin.is-rev .threads,.stage.is-spin.is-rev .arc{animation-direction:reverse}
+.stage.is-impact .shaker{animation:shake 90ms linear infinite}
+.stage.is-slip .sparks{animation:flick .14s steps(2) infinite}
+.stage.is-stripped .screw-head{fill:var(--steel-dark)}
+
+.bubbles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.bubble{position:absolute;transform:translate(-50%,-50%) rotate(var(--r, 0deg));font-family:var(--f-display);font-size:1.1rem;font-weight:700;line-height:1;color:var(--on-lime);background:var(--lime);border:2px solid var(--edge);border-radius:12px;padding:5px 10px;white-space:nowrap;animation:pop .6s ease-out forwards}
+
+@keyframes facet{0%,100%{fill:var(--steel-hi)}33%{fill:var(--steel)}66%{fill:var(--steel-dark)}}
+@keyframes thread{to{transform:translateX(-5px)}}
+@keyframes dash{to{stroke-dashoffset:-36}}
+@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(-1.3px,.6px)}50%{transform:translate(.9px,-.6px)}75%{transform:translate(-.6px,-.4px)}}
+@keyframes flick{0%{opacity:1}50%{opacity:.15}}
+@keyframes flash{0%,40%{stroke:var(--lime);stroke-width:5}100%{stroke:var(--edge);stroke-width:2.5}}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
+@keyframes pop{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r, 0deg)) scale(.4)}
+  25%{opacity:1;transform:translate(-50%,-62%) rotate(var(--r, 0deg)) scale(1.08)}
+  100%{opacity:0;transform:translate(-50%,-140%) rotate(var(--r, 0deg)) scale(1)}
+}
+
+/* speed panel: a copy of the real panel on the base */
+.panel-body{fill:var(--tool);stroke:var(--edge);stroke-width:1.5}
+.panel-btn{fill:var(--red)}
+.panel-led{fill:var(--lime)}
+.speed-panel.flash .panel-body{animation:flash .9s ease-out}
+.panel-ui{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;background:var(--tool);border:2px solid var(--edge);border-radius:16px;padding:8px 12px}
+.pbtn{appearance:none;-webkit-appearance:none;border:0;background:none;padding:0;display:grid;justify-items:center;gap:5px;cursor:pointer;color:var(--panel-ink)}
+.pcirc{width:42px;height:42px;border-radius:50%;background:var(--red);color:var(--on-red);border:2px solid var(--edge);display:grid;place-items:center;box-shadow:0 3px 0 var(--edge);transition:transform .06s, box-shadow .06s}
+.pcirc svg{width:20px;height:20px;display:block}
+.pcirc svg rect{fill:currentColor}
+.pbtn:active .pcirc{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.plab{font-family:var(--f-mono);font-size:.62rem;font-weight:600;letter-spacing:.04em;line-height:1;white-space:nowrap}
+.leds{display:grid;gap:3px}
+.leds button{appearance:none;-webkit-appearance:none;border:0;background:none;padding:1px 2px;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--panel-ink);font-family:var(--f-mono);font-size:.72rem;font-weight:600;line-height:1}
+.leds i{display:block;width:30px;height:7px;border-radius:3px;background:var(--led-off)}
+.leds button[aria-pressed="true"]{color:var(--lime)}
+.leds button[aria-pressed="true"] i{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+
+/* product photos */
+.photo{margin:0;display:grid;gap:8px;justify-items:center}
+.photo img{display:block;width:100%;height:auto;border-radius:16px;border:2px solid var(--edge);background:var(--sheet)}
+.photo.kit img{max-width:420px}
+.photo.base img{max-width:300px}
+.photo figcaption{font-size:.88rem;color:var(--muted);text-align:center;max-width:44ch;text-wrap:balance}
+
+/* sheets */
+.sheet{background:var(--sheet);border:1.5px solid var(--line);border-radius:22px;padding:22px 18px;display:grid;gap:14px}
+.sub{color:var(--muted)}
+.kicker{font-size:.9rem;font-weight:800;color:var(--lime-ink)}
+.sheet-head{display:grid;gap:4px}
+
+/* checklist */
+.steps{list-style:none;margin:0;padding:0;display:grid}
+.step{display:grid;gap:8px;padding-block:14px;border-top:1.5px dashed var(--line)}
+.step:first-child{border-top:0;padding-top:4px}
+.step-head{position:relative;display:flex;align-items:center;gap:12px;cursor:pointer;font-weight:800;font-size:1.08rem;line-height:1.3}
+.box{flex:none;width:28px;height:28px;border:2px solid var(--edge);border-radius:9px;background:var(--sheet);display:grid;place-items:center;transition:background .15s}
+.box::after{content:"";width:7px;height:13px;border:solid var(--on-lime);border-width:0 3px 3px 0;transform:translateY(-1px) rotate(45deg) scale(0);transition:transform .15s}
+.vh:checked + .box{background:var(--lime)}
+.vh:checked + .box::after{transform:translateY(-1px) rotate(45deg) scale(1)}
+.vh:focus-visible + .box{outline:3px solid var(--focus);outline-offset:2px}
+.step-n{font-family:var(--f-mono);font-weight:600;color:var(--lime-ink);font-size:.95rem}
+.step.is-done .step-title{color:var(--muted);text-decoration:line-through;text-decoration-thickness:2px}
+.step-body{display:grid;gap:10px;padding-inline-start:40px}
+.q{font-weight:800}
+.wrap-seg button{padding:10px 6px;font-size:.95rem}
+.verdict{border-radius:14px;padding:12px 14px;border:2px solid var(--line)}
+.verdict[data-tone="idle"]{border-style:dashed;color:var(--muted)}
+.verdict[data-tone="good"]{background:var(--good-bg);border-color:var(--good)}
+.verdict[data-tone="bad"]{background:var(--bad-bg);border-color:var(--bad)}
+.verdict[data-tone="warn"]{background:var(--warn-bg);border-color:var(--warn)}
+.verdict[data-tone="good"] strong{color:var(--good)}
+.verdict[data-tone="bad"] strong{color:var(--bad)}
+.all-done{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;background:var(--lime);color:var(--on-lime);border:2px solid var(--edge);border-radius:16px;padding:12px 14px;font-weight:800}
+.all-done button{appearance:none;-webkit-appearance:none;border:0;background:none;color:var(--on-lime);font-weight:700;font-size:.92rem;text-decoration:underline;cursor:pointer;padding:4px}
+
+/* parts */
+.parts-fig{position:relative;width:min(100%, 440px);margin-inline:auto;background:var(--stage);border:2px solid var(--edge);border-radius:18px}
+.parts-fig svg{display:block;width:100%;height:auto;border-radius:16px}
+.pin{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--edge);background:var(--sheet);color:var(--ink);font-family:var(--f-mono);font-size:.95rem;font-weight:600;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 0 var(--edge)}
+.pin[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.pin[aria-pressed="true"]::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--lime-ink);animation:ring 1.4s ease-out infinite}
+.leader{stroke:var(--leader);stroke-width:1.8;stroke-dasharray:3 3}
+.leader.on{stroke:var(--lime-ink);stroke-width:2.6;stroke-dasharray:none}
+.anchor{fill:var(--sheet);stroke:var(--leader);stroke-width:1.8}
+.anchor.on{fill:var(--lime)}
+.part-info{display:grid;gap:4px;border:2px solid var(--edge);border-radius:16px;padding:14px;box-shadow:0 4px 0 var(--edge);min-height:9.5em}
+.part-name{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:600;font-size:1.2rem}
+.part-name .num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--sheet);display:grid;place-items:center;font-family:var(--f-mono);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{appearance:none;-webkit-appearance:none;border:2px solid var(--edge);background:var(--sheet);color:var(--ink);border-radius:999px;padding:7px 13px;font-size:.95rem;font-weight:700;line-height:1.2;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--lime);color:var(--on-lime)}
+
+/* speed */
+.task-card{display:grid;gap:12px;border:2px solid var(--edge);border-radius:18px;padding:16px;box-shadow:0 4px 0 var(--edge)}
+.tc-head{display:flex;align-items:center;gap:14px}
+.tc-speed{flex:none;width:74px;height:74px;border-radius:50%;background:var(--lime);color:var(--on-lime);border:2px solid var(--edge);display:grid;place-content:center;text-align:center;line-height:1}
+.tc-num{font-family:var(--f-display);font-size:2.1rem;font-weight:700}
+.tc-lab{font-size:.75rem;font-weight:800}
+.tc-meta{display:grid;gap:4px;min-width:0}
+.gauge{display:flex;gap:4px}
+.gauge i{width:26px;height:10px;border-radius:4px;border:2px solid var(--edge);background:var(--sheet)}
+.gauge i.on{background:var(--lime)}
+.tc-meta p{font-size:.95rem;color:var(--muted)}
+.tc-meta b{color:var(--ink)}
+.tc-meta .num{font-family:var(--f-mono);font-weight:600}
+.dots{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.dots li{position:relative;padding-inline-start:22px}
+.dots li::before{content:"";position:absolute;inset-inline-start:2px;top:.55em;width:9px;height:9px;border-radius:3px;background:var(--lime);border:1.5px solid var(--edge)}
+.btn{justify-self:start;appearance:none;-webkit-appearance:none;border:2px solid var(--edge);background:var(--lime);color:var(--on-lime);border-radius:12px;padding:9px 16px;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 3px 0 var(--edge)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+.speeds{list-style:none;margin:0;padding:0;display:grid}
+.speeds li{display:grid;grid-template-columns:44px 1fr;grid-template-areas:"n u" "n v";column-gap:12px;align-items:center;padding-block:10px;border-top:1.5px dashed var(--line)}
+.speeds li:first-child{border-top:0}
+.sp-n{grid-area:n;width:40px;height:40px;border-radius:50%;border:2px solid var(--edge);background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-family:var(--f-display);font-size:1.3rem;font-weight:700}
+.sp-v{grid-area:v;font-size:.88rem;color:var(--muted)}
+.sp-v b{font-family:var(--f-mono);font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.sp-u{grid-area:u;font-weight:700}
+.note{font-size:.9rem;color:var(--muted)}
+
+/* bits */
+.heads{list-style:none;margin:0;padding:0;display:grid}
+.heads li{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start;padding-block:12px;border-top:1.5px dashed var(--line)}
+.heads li:first-child{border-top:0;padding-top:2px}
+.heads svg{width:48px;height:48px;display:block}
+.head-disc{fill:var(--steel);stroke:var(--edge);stroke-width:2}
+.recess{fill:var(--tool)}
+.recess-line{fill:none;stroke:var(--tool);stroke-width:2;stroke-linecap:round}
+.torx{fill:var(--tool);stroke:var(--tool);stroke-width:2.5;stroke-linejoin:round}
+.head-name{font-weight:800}
+.head-code{font-family:var(--f-mono);font-size:.85rem;font-weight:600;color:var(--lime-ink);margin-right:8px}
+.head-text{color:var(--ink)}
+.tipbox{display:grid;gap:8px;background:var(--board);border-radius:14px;padding:14px}
+
+/* faq */
+.faq{display:grid}
+.faq details{border-top:1.5px dashed var(--line)}
+.faq details:first-child{border-top:0}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:13px;font-weight:800;line-height:1.35}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:22px;height:22px;border:2px solid var(--edge);border-radius:7px;background:
+  linear-gradient(var(--ink),var(--ink)) center/10px 2px no-repeat,
+  linear-gradient(var(--ink),var(--ink)) center/2px 10px no-repeat, var(--sheet)}
+.faq details[open] summary::after{background:linear-gradient(var(--on-lime),var(--on-lime)) center/10px 2px no-repeat, var(--lime)}
+.ans{padding-bottom:14px;display:grid;gap:8px}
+
+/* safety */
+.two{display:grid;gap:18px}
+.two h3{margin-bottom:8px}
+
+/* footer */
+.foot{display:grid;gap:10px;padding-block:6px 40px;color:var(--muted);font-size:.92rem}
+.mailrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.mail{font-family:var(--f-mono);font-weight:600;color:var(--ink);user-select:all;-webkit-user-select:all}
+.copy-note{font-weight:700;color:var(--lime-ink)}
+
+@media (min-width:640px){
+  .two{grid-template-columns:1fr 1fr}
+  .sheet{padding:26px 24px}
+}
+@media (prefers-reduced-motion: reduce){
+  .stage.is-spin .arc,.stage.is-spin .facet,.stage.is-spin .threads,.stage.is-impact .shaker,.stage.is-slip .sparks,
+  .trigger.hint::after,.pin[aria-pressed="true"]::after,.dirbtn.flash,.speed-panel.flash .panel-body,.bubble{animation:none}
+  .stage.is-slip .sparks{opacity:1}
+  .trigger,.box,.box::after,.led,.beam,.arc{transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<nav class="topnav" aria-label="ניווט בעמוד">
+  <div class="wrap navrow">
+    <a href="#sim">לנסות</a>
+    <a href="#start">מתחילים</a>
+    <a href="#parts">חלקים</a>
+    <a href="#speed">מהירות</a>
+    <a href="#bits">ביטים</a>
+    <a href="#faq">תקלות</a>
+    <a href="#safety">בטיחות</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow"><bdi dir="ltr">Robustrue DR12 Pro · 21V MAX</bdi></p>
+    <h1>המברגה <span class="hl">הירוקה</span></h1>
+    <p class="lead">מדריך קצר למברגת האימפקט, מהקופסה ועד הבורג המאה. כמעט הכול כאן לחיץ.</p>
+  </header>
+
+  <section class="sim" id="sim" aria-label="סימולטור הברגה">
+    <div class="stage" id="stage">
+      <span class="tag">סימולטור</span>
+      <div class="stage-inner">
+        <svg id="simSvg" viewBox="0 0 360 340" role="img" aria-label="איור: המברגה מול קרש, עם בורג על הביט">
+          <defs>
+            <clipPath id="h-shaft"><path d="M44 112 L50 107 L80 107 L80 117 L50 117 Z"/></clipPath>
+          </defs>
+          <g id="mover">
+            <g class="shaker">
+              <ellipse class="shadow" cx="277" cy="333" rx="72" ry="4.5"/>
+              <g class="drill-body">
+                <!-- battery -->
+                <rect class="tool" x="214" y="290" width="124" height="38" rx="9"/>
+                <circle class="hi" cx="226" cy="311" r="4.2"/>
+                <g class="bars"><rect x="235" y="307" width="4" height="8" rx="1"/><rect x="241" y="307" width="4" height="8" rx="1"/><rect x="247" y="307" width="4" height="8" rx="1"/><rect x="253" y="307" width="4" height="8" rx="1"/></g>
+                <text class="cap" x="330" y="315" text-anchor="end" direction="ltr">2.0Ah</text>
+                <!-- base -->
+                <path class="lime-part" d="M228 272 L322 272 Q332 272 332 282 L332 292 L218 292 L218 282 Q218 272 228 272 Z"/>
+                <path class="slits" d="M282 277 L289 286 M293 277 L300 286 M304 277 L311 286"/>
+                <!-- battery release latch -->
+                <rect class="steel-part" x="215" y="287" width="16" height="10" rx="3"/>
+                <!-- speed panel on top of the base -->
+                <g class="speed-panel">
+                  <rect class="panel-body" x="222" y="266" width="27" height="7" rx="3.5"/>
+                  <circle class="panel-btn" cx="227" cy="269.5" r="1.9"/>
+                  <circle class="panel-btn" cx="244" cy="269.5" r="1.9"/>
+                  <rect class="panel-led" x="233.5" y="268.3" width="4.5" height="2.4" rx="1"/>
+                </g>
+                <!-- handle -->
+                <path class="lime-part" d="M236 156 L296 156 L310 280 L250 280 Z"/>
+                <path class="grip" d="M239 178 L276 178 L287 276 L252 276 Z"/>
+                <!-- trigger -->
+                <path class="tool" d="M238 178 L224 182 Q218 194 224 206 L240 208 Z"/>
+                <!-- chin and LED -->
+                <path class="lime-part" d="M206 140 L236 146 L236 174 L216 174 Q206 174 206 164 Z"/>
+                <rect class="led" x="210" y="148" width="13" height="11" rx="2.5"/>
+                <!-- forward / reverse switch -->
+                <rect class="tool dirbtn" x="252" y="160" width="24" height="10" rx="5"/>
+                <!-- motor housing -->
+                <rect class="lime-part" x="226" y="62" width="104" height="98" rx="26"/>
+                <rect class="tool" x="248" y="82" width="70" height="58" rx="12"/>
+                <text class="badge" x="283" y="118" text-anchor="middle" direction="ltr">21V</text>
+                <path class="vents" d="M324 90 L320 103 M324 108 L320 121 M324 126 L320 139"/>
+                <!-- hammer case -->
+                <path class="tool" d="M164 93 L228 80 Q234 79 234 86 L234 146 Q234 152 228 152 L164 131 Z"/>
+                <path class="shine" d="M172 96 L224 86"/>
+                <!-- collar -->
+                <rect class="tool" x="130" y="90" width="36" height="44" rx="9"/>
+                <path class="knurl" d="M137 96 V128 M143 96 V128 M149 96 V128 M155 96 V128 M161 96 V128"/>
+                <!-- chuck nose -->
+                <rect class="steel-part" x="121" y="99" width="12" height="26" rx="3"/>
+                <!-- bit -->
+                <g class="bit">
+                  <rect class="facet f1" x="104" y="104" width="19" height="5.4"/>
+                  <rect class="facet f2" x="104" y="109.4" width="19" height="5.3"/>
+                  <rect class="facet f3" x="104" y="114.7" width="19" height="5.3"/>
+                  <rect class="bit-outline" x="104" y="104" width="19" height="16" rx="1.5"/>
+                  <rect class="steel-part" x="97" y="108" width="8" height="8"/>
+                  <path class="steel-part" d="M90 112 L97 107 L97 117 Z"/>
+                </g>
+              </g>
+              <!-- screw -->
+              <g class="screw">
+                <path class="steel-part" d="M44 112 L50 107 L80 107 L80 117 L50 117 Z"/>
+                <g clip-path="url(#h-shaft)"><g class="threads"><path d="M48 106 l-3 12 M53 106 l-3 12 M58 106 l-3 12 M63 106 l-3 12 M68 106 l-3 12 M73 106 l-3 12 M78 106 l-3 12 M83 106 l-3 12 M88 106 l-3 12"/></g></g>
+                <path class="screw-line" d="M44 112 L50 107 L80 107 L80 117 L50 117 Z"/>
+                <path class="steel-part screw-head" d="M80 100 L84 100 Q90 100 90 112 Q90 124 84 124 L80 124 Z"/>
+              </g>
+              <ellipse class="arc" cx="148" cy="112" rx="9" ry="27"/>
+              <ellipse class="arc" cx="113" cy="112" rx="4.5" ry="12"/>
+              <polygon class="beam" points="211,152 92,102 92,124"/>
+              <path class="sparks" d="M86 103 l-7 -7 M84 112 h-9 M86 121 l-7 7"/>
+            </g>
+          </g>
+          <g class="plank">
+            <rect x="-12" y="22" width="56" height="300" rx="6"/>
+            <path class="grain" d="M10 40 C16 90 6 130 13 175 S7 250 15 305"/>
+            <path class="grain" d="M28 34 C34 95 24 150 31 200 S25 265 31 312"/>
+            <ellipse class="grain" cx="20" cy="240" rx="5" ry="10"/>
+          </g>
+        </svg>
+        <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="sim-body">
+      <p class="sim-status" id="simStatus" aria-live="polite">הבורג מחכה. לחצו והחזיקו את ההדק.</p>
+      <div class="ctl">
+        <span class="ctl-label" id="dirLab">כיוון</span>
+        <div class="seg" role="group" aria-labelledby="dirLab">
+          <button type="button" data-dir="fwd" aria-pressed="true">הברגה</button>
+          <button type="button" data-dir="lock" aria-pressed="false">נעול</button>
+          <button type="button" data-dir="rev" aria-pressed="false">שחרור</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <span class="ctl-label" id="spdLab">מהירות</span>
+        <div class="panel-ui" dir="ltr" role="group" aria-labelledby="spdLab">
+          <button type="button" class="pbtn" id="scenesBtn" aria-label="SCENES: מצבי עבודה נוספים">
+            <span class="pcirc"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg></span>
+            <span class="plab">SCENES</span>
+          </button>
+          <div class="leds">
+            <button type="button" data-speed="4" aria-pressed="false" aria-label="מהירות 4"><i></i><span>4</span></button>
+            <button type="button" data-speed="3" aria-pressed="false" aria-label="מהירות 3"><i></i><span>3</span></button>
+            <button type="button" data-speed="2" aria-pressed="false" aria-label="מהירות 2"><i></i><span>2</span></button>
+            <button type="button" data-speed="1" aria-pressed="true" aria-label="מהירות 1"><i></i><span>1</span></button>
+          </div>
+          <button type="button" class="pbtn" id="speedModeBtn" aria-label="SPEED MODE: מעבר למהירות הבאה">
+            <span class="pcirc"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 14.5a6.5 6.5 0 1 1 13 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M10 14.5l3.6-4.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span class="plab">SPEED MODE</span>
+          </button>
+        </div>
+        <p class="readout"><span class="nw">עד <b id="rpm">1,350</b> סל״ד</span> · <span class="nw"><b id="ipm">1,600</b> מכות</span> · <span class="nw"><b id="nm">110</b> נ״מ</span></p>
+      </div>
+      <button type="button" class="trigger hint" id="trigger"><span id="trigLabel">לחצו והחזיקו את ההדק</span></button>
+      <div class="sim-foot">
+        <button type="button" class="ghost" id="resetBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>בורג חדש</span>
+        </button>
+        <button type="button" class="ghost" id="soundBtn" aria-pressed="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5h4l5-4v13l-5-4H3z" fill="currentColor"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path class="mute" d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span id="soundLabel">סאונד פועל</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="start" aria-labelledby="startTitle">
+    <div class="sheet-head">
+      <p class="kicker">פעם ראשונה</p>
+      <h2 id="startTitle">מהקופסה לבורג הראשון</h2>
+      <p class="sub">שישה צעדים, פעם אחת. אפשר לסמן תוך כדי.</p>
+    </div>
+    <figure class="photo kit">
+      <img src="img/kit.jpg" width="800" height="800" loading="lazy" decoding="async" alt="הערכה: המברגה, שתי סוללות של 2.0Ah, מטען עם תקע אמריקאי, וביטים ומתאמים">
+      <figcaption>מה יש בערכה: המברגה, שתי סוללות, מטען, וביטים ומתאמים. התמונה מדף המוצר.</figcaption>
+    </figure>
+    <ol class="steps">
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step1" data-step="1"><span class="box" aria-hidden="true"></span><span class="step-n">1</span><span class="step-title">בודקים את המטען</span></label>
+        <div class="step-body">
+          <p>המטען הגיע עם תקע אמריקאי, שני פינים שטוחים. לשקע בבית הוא לא נכנס, ואסור לדחוף אותו בכוח.</p>
+          <p class="q" id="voltQ">מה כתוב על המטען, ליד המילה <bdi dir="ltr">INPUT</bdi>?</p>
+          <div class="seg wrap-seg" role="group" aria-labelledby="voltQ">
+            <button type="button" data-volt="wide" aria-pressed="false"><bdi dir="ltr">100-240V</bdi></button>
+            <button type="button" data-volt="us" aria-pressed="false">עד <bdi dir="ltr">120V</bdi> בלבד</button>
+            <button type="button" data-volt="none" aria-pressed="false">לא מוצא</button>
+          </div>
+          <div class="verdict" id="verdict" data-tone="idle" aria-live="polite">בחרו את מה שכתוב על המטען, ונגיד מה עושים.</div>
+        </div>
+      </li>
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step2" data-step="2"><span class="box" aria-hidden="true"></span><span class="step-n">2</span><span class="step-title">טוענים את הסוללה</span></label>
+        <div class="step-body"><p>את התקע העגול שבקצה הכבל של המטען מכניסים לשקע הטעינה שבסוללה. לפני העבודה הראשונה טוענים עד הסוף, על משטח קשה, רחוק מבדים, מניירות ומשמש ישירה. בערכה יש שתי סוללות, אז אחת יכולה להיטען בזמן שעובדים עם השנייה.</p></div>
+      </li>
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step3" data-step="3"><span class="box" aria-hidden="true"></span><span class="step-n">3</span><span class="step-title">מכניסים את הסוללה</span></label>
+        <div class="step-body"><p>מחליקים אותה לבסיס הידית עד שנשמע קליק. לחיצה על הכפתור שבחזית הסוללה מדליקה ארבעה פסים ירוקים שמראים כמה טעינה נשארה.</p></div>
+      </li>
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step4" data-step="4"><span class="box" aria-hidden="true"></span><span class="step-n">4</span><span class="step-title">מכניסים ביט</span></label>
+        <div class="step-body"><p>מושכים את הטבעת שבראש המברגה קדימה, מכניסים את הביט עד הסוף ומשחררים. משיכה קלה בביט מוודאת שהוא ננעל.</p></div>
+      </li>
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step5" data-step="5"><span class="box" aria-hidden="true"></span><span class="step-n">5</span><span class="step-title">בוחרים כיוון ומהירות</span></label>
+        <div class="step-body"><p>המתג שמעל ההדק קובע את הכיוון, ובמצב האמצעי הוא נועל. את המהירות בוחרים בלוח שעל הבסיס, מלפנים: כל לחיצה על <bdi dir="ltr">SPEED MODE</bdi> עוברת למהירות הבאה, והנורית מראה איזו נבחרה. מתחילים ב-1 ועולים רק אם צריך. <a href="#speed">איזו מהירות לאיזו עבודה</a></p></div>
+      </li>
+      <li class="step">
+        <label class="step-head"><input class="vh" type="checkbox" id="step6" data-step="6"><span class="box" aria-hidden="true"></span><span class="step-n">6</span><span class="step-title">מתחילים לאט</span></label>
+        <div class="step-body"><p>מצמידים את הביט לבורג בקו ישר ודוחפים פנימה. לוחצים בעדינות עד שהבורג תופס, ואז מגבירים. כשהראש מגיע לחומר, עוזבים.</p></div>
+      </li>
+    </ol>
+    <div class="all-done" id="allDone" hidden>
+      <span>זהו, מוכנים. בהצלחה עם הבורג הראשון.</span>
+      <button type="button" id="clearSteps">לנקות סימונים</button>
+    </div>
+  </section>
+
+  <section class="sheet" id="parts" aria-labelledby="partsTitle">
+    <div class="sheet-head">
+      <p class="kicker">היכרות</p>
+      <h2 id="partsTitle">הכירו את המברגה</h2>
+      <p class="sub">לחצו על מספר בציור.</p>
+    </div>
+    <div class="parts-fig" id="partsFig">
+      <svg id="partsSvg" viewBox="70 50 290 310" role="img" aria-label="איור המברגה עם מספרים על החלקים"></svg>
+    </div>
+    <div class="part-info" aria-live="polite">
+      <p class="part-name"><span class="num" id="partNum">1</span><span id="partName">ראש תפיסה מהיר</span></p>
+      <p id="partText">כאן נכנסים הביטים: זנב משושה של 1/4 אינץ׳ (6.35 מ״מ). מושכים את הטבעת קדימה, מכניסים או מוציאים ביט, ומשחררים.</p>
+    </div>
+    <div class="chips" id="partChips" role="group" aria-label="חלקי המברגה"></div>
+    <figure class="photo base">
+      <img src="img/base-panel.jpg" width="470" height="650" loading="lazy" decoding="async" alt="הבסיס מלפנים: לוח עם כפתור SCENES, ארבע נוריות וכפתור SPEED MODE, ומתחתיו הסוללה עם התפס, כפתור ההפעלה וארבעה פסי טעינה">
+      <figcaption>ככה זה נראה במציאות, מלפנים. למעלה לוח המהירויות (<bdi dir="ltr">SCENES</bdi>, הנוריות, <bdi dir="ltr">SPEED MODE</bdi>), באמצע תפס הסוללה, ולמטה כפתור ומד הטעינה. התמונה מדף המוצר.</figcaption>
+    </figure>
+  </section>
+
+  <section class="sheet" id="speed" aria-labelledby="speedTitle">
+    <div class="sheet-head">
+      <p class="kicker">ארבע מהירויות</p>
+      <h2 id="speedTitle">איזו מהירות לאיזו עבודה?</h2>
+      <p class="sub">בוחרים בכפתור <bdi dir="ltr">SPEED MODE</bdi> שבלוח על הבסיס: 1 הכי עדין, 4 הכי חזק. מה עושים היום?</p>
+    </div>
+    <div class="chips" id="taskChips" role="group" aria-label="סוג העבודה">
+      <button type="button" class="chip" data-task="furniture" aria-pressed="false">הרכבת רהיט</button>
+      <button type="button" class="chip" data-task="wall" aria-pressed="false">מדף או תמונה בקיר</button>
+      <button type="button" class="chip" data-task="wood" aria-pressed="true">בורג רגיל לעץ</button>
+      <button type="button" class="chip" data-task="long" aria-pressed="false">בורג ארוך, קורה, דק</button>
+      <button type="button" class="chip" data-task="stuck" aria-pressed="false">שחרור בורג תקוע</button>
+      <button type="button" class="chip" data-task="drill" aria-pressed="false">קידוח בעץ או בפלסטיק</button>
+    </div>
+    <article class="task-card" id="taskCard" aria-live="polite"></article>
+    <h3>ארבע המהירויות</h3>
+    <ol class="speeds">
+      <li><span class="sp-n">1</span><span class="sp-u">רהיטים, דיבלים, ברגים קטנים</span><span class="sp-v"><b>1,350</b> סל״ד · <b>1,600</b> מכות · <b>110</b> נ״מ</span></li>
+      <li><span class="sp-n">2</span><span class="sp-u">ברגים רגילים לעץ</span><span class="sp-v"><b>2,000</b> סל״ד · <b>2,800</b> מכות · <b>150</b> נ״מ</span></li>
+      <li><span class="sp-n">3</span><span class="sp-u">קידוח בעץ, ברגים בינוניים</span><span class="sp-v"><b>2,650</b> סל״ד · <b>3,500</b> מכות · <b>190</b> נ״מ</span></li>
+      <li><span class="sp-n">4</span><span class="sp-u">ברגים ארוכים, קורות, בורג תקוע</span><span class="sp-v"><b>3,200</b> סל״ד · <b>4,000</b> מכות · <b>230</b> נ״מ</span></li>
+    </ol>
+    <p class="note">סל״ד ומכות לדקה מהקופסה: סיבובים בלי עומס, ומכות כשהפטיש עובד. המומנט, כלומר כוח הסיבוב המרבי בניוטון מטר (נ״מ), לפי דף המוצר.</p>
+  </section>
+
+  <section class="sheet" id="bits" aria-labelledby="bitsTitle">
+    <div class="sheet-head">
+      <p class="kicker">ביטים</p>
+      <h2 id="bitsTitle">איזה ראש יש לבורג?</h2>
+      <p class="sub">ביט בגודל הנכון הוא ההבדל בין בורג שנכנס חלק לבורג עם ראש הרוס.</p>
+    </div>
+    <ul class="heads">
+      <li>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><path class="recess" d="M22 9 L24.6 19.4 L35 22 L24.6 24.6 L22 35 L19.4 24.6 L9 22 L19.4 19.4 Z"/></svg>
+        <div><p class="head-name">פיליפס<span class="head-code" dir="ltr">PH</span></p><p class="head-text">צלב. הכי נפוץ בבית, וביט PH2 מתאים לרוב הברגים.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><path class="recess" d="M22 9 L24.6 19.4 L35 22 L24.6 24.6 L22 35 L19.4 24.6 L9 22 L19.4 19.4 Z"/><path class="recess-line" d="M14.5 14.5 L18 18 M29.5 14.5 L26 18 M14.5 29.5 L18 26 M29.5 29.5 L26 26"/></svg>
+        <div><p class="head-name">פוזידרייב<span class="head-code" dir="ltr">PZ</span></p><p class="head-text">צלב עם קווים דקים בין הזרועות. נפוץ ברהיטים, וביט PH מחליק עליו.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><polygon class="torx" points="22,11 25.25,16.37 31.53,16.5 28.5,22 31.53,27.5 25.25,27.63 22,33 18.75,27.63 12.47,27.5 15.5,22 12.47,16.5 18.75,16.37"/></svg>
+        <div><p class="head-name">טורקס<span class="head-code" dir="ltr">TX</span></p><p class="head-text">כוכב עם שישה קצוות. בברגי דק ובברגים חזקים. כמעט לא מחליק.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><polygon class="recess" points="31,22 26.5,29.8 17.5,29.8 13,22 17.5,14.2 26.5,14.2"/></svg>
+        <div><p class="head-name">אלן, משושה<span class="head-code" dir="ltr">HEX</span></p><p class="head-text">חור משושה. ברהיטים להרכבה עצמית. רק במידה המדויקת.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="head-disc" cx="22" cy="22" r="19"/><rect class="recess" x="9" y="19.5" width="26" height="5" rx="1.5"/></svg>
+        <div><p class="head-name">שטוח<span class="head-code" dir="ltr">SL</span></p><p class="head-text">חריץ אחד. מחליק בקלות, עדיף להבריג ביד.</p></div>
+      </li>
+    </ul>
+    <div class="tipbox">
+      <ul class="dots">
+        <li>ביטים שמסומנים <bdi dir="ltr">IMPACT</bdi> עמידים במכות. ביט רגיל עלול להישבר.</li>
+        <li>ביט קצר בלי חריץ בזנב לא ננעל בראש לבד. מכניסים אותו דרך מחזיק ביטים מגנטי.</li>
+        <li>לקידוח צריך מקדח עם זנב משושה. מקדח עם זנב עגול לא ייכנס.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sheet" id="faq" aria-labelledby="faqTitle">
+    <div class="sheet-head">
+      <p class="kicker">כשמשהו מוזר</p>
+      <h2 id="faqTitle">שאלות ותקלות</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>הוא עושה רעש של פטיש. זה תקין?</summary>
+        <div class="ans"><p>כן. כשהבורג מתחיל להתנגד, פטיש קטן בפנים מכה בציר, עד 4,000 פעמים בדקה במהירות 4. זה הכוח של אימפקט, וזה גם מה שחוסך לכם את פרק היד. בעבודה ארוכה כדאי אטמי אוזניים.</p></div>
+      </details>
+      <details>
+        <summary>מה עושה הכפתור <bdi dir="ltr">SCENES</bdi>?</summary>
+        <div class="ans"><p>הוא מפעיל מצבי עבודה נוספים, והפירוט שלהם נמצא בחוברת שבקופסה. לעבודה רגילה מספיק <bdi dir="ltr">SPEED MODE</bdi>.</p></div>
+      </details>
+      <details>
+        <summary>בשחרור היא פתאום מאטה</summary>
+        <div class="ans"><p>זה מכוון. במצב שחרור המברגה מאטה לבד ברגע שהבורג משתחרר, כדי שהבורג או האום לא יעופו.</p></div>
+      </details>
+      <details>
+        <summary>לוחצים על ההדק ולא קורה כלום</summary>
+        <div class="ans"><ul class="dots">
+          <li>מתג הכיוון באמצע? זה מצב נעילה.</li>
+          <li>הסוללה ריקה? הכפתור שבחזית הסוללה יגיד.</li>
+          <li>הסוללה לא נכנסה עד הקליק.</li>
+          <li>אחרי עומס כבד המברגה יכולה לכבות כדי להגן על עצמה. מחכים כמה דקות שתתקרר.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>הביט נופל או לא ננעל</summary>
+        <div class="ans"><p>דוחפים אותו עד הסוף. ביט קצר בלי חריץ בזנב לא ננעל לבד, וצריך בשבילו מחזיק ביטים.</p></div>
+      </details>
+      <details>
+        <summary>ראש הבורג נהרס</summary>
+        <div class="ans"><p>בדרך כלל זה ביט לא מתאים (PH על בורג PZ, או מידה קטנה מדי), לחיצה חלשה פנימה, מהירות גבוהה מדי או ביט שחוק. מחליפים ביט, מורידים מהירות ודוחפים חזק פנימה.</p></div>
+      </details>
+      <details>
+        <summary>העץ נסדק או שהבורג נכנס עקום</summary>
+        <div class="ans"><p>מחזיקים את המברגה בקו אחד עם הבורג. בעץ קשה או קרוב לקצה קודחים קודם חור מוביל דק.</p></div>
+      </details>
+      <details>
+        <summary>הבורג נשבר או שהחור התרחב</summary>
+        <div class="ans"><p>המברגה חזקה יותר מהבורג. מורידים מהירות, ועוזבים את ההדק ברגע שהראש מגיע לחומר.</p></div>
+      </details>
+      <details>
+        <summary>המברגה או הסוללה חמות</summary>
+        <div class="ans"><p>אחרי עבודה רצופה זה קורה. נותנים להן לנוח, וסוללה חמה לא מכניסים לטעינה עד שתתקרר.</p></div>
+      </details>
+      <details>
+        <summary>הסוללה נגמרת מהר</summary>
+        <div class="ans"><p>סוללה של <bdi dir="ltr">2.0Ah</bdi> קטנה וקלה, ומספיקה לעבודות קצרות. בערכה יש שתיים: אחת בעבודה, ואחת בטעינה.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="sheet" id="safety" aria-labelledby="safetyTitle">
+    <div class="sheet-head">
+      <p class="kicker">בלי הפתעות</p>
+      <h2 id="safetyTitle">בטיחות וסוללה</h2>
+    </div>
+    <div class="two">
+      <div>
+        <h3>בזמן עבודה</h3>
+        <ul class="dots">
+          <li>משקפי מגן. שבבים וקצוות של ברגים עפים.</li>
+          <li>היד השנייה רחוק מהביט, וגם מהצד השני של הלוח, איפה שהבורג עלול לצאת.</li>
+          <li>מחליפים ביט כשהמתג באמצע (נעול), או בלי סוללה.</li>
+          <li>לפני קידוח בקיר: מוודאים שאין שם חשמל או צנרת.</li>
+          <li>לא בגשם, ולא עם ידיים רטובות.</li>
+          <li>שיער ארוך אסוף, ובלי שרוולים רחבים או תכשיטים ליד הראש המסתובב.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>סוללה ותחזוקה</h3>
+        <ul class="dots">
+          <li>לא משאירים ברכב בקיץ, ולא בשמש.</li>
+          <li>מטעינים על משטח קשה, ולא משאירים בטעינה כל הלילה בלי השגחה.</li>
+          <li>לאחסון ארוך: מוציאים את הסוללה מהמברגה, טעונה בערך עד חצי, ושומרים במקום יבש.</li>
+          <li>סוללה נפוחה, סדוקה או עם ריח מוזר: לא מטעינים. מעבירים למחזור סוללות.</li>
+          <li>המטען הזה רק לסוללות האלה, והסוללות רק למטען הזה.</li>
+          <li>ניקוי: מטלית לחה, בלי חומרים חריפים. את פתחי האוורור שומרים נקיים.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>מדריך לא רשמי. נכתב לפי הקופסה, תמונות המוצר ודף המוצר. אם משהו כאן סותר את החוברת שבקופסה, החוברת קובעת. לפי דף המוצר, האחריות לשלוש שנים.</p>
+  <div class="mailrow">
+    <span>שירות לקוחות של היצרן, לפי הקופסה:</span>
+    <span class="mail" id="mail" dir="ltr">support@robustrue.com</span>
+    <button type="button" class="ghost" id="copyMail">העתקה</button>
+    <span class="copy-note" id="copyNote" aria-live="polite"></span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var store = {
+    get: function(k, d){ try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var fmt = function(n){ return n.toLocaleString("en-US"); };
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs){ var el = document.createElementNS(SVGNS, tag); for (var k in attrs) el.setAttribute(k, attrs[k]); return el; }
+
+  /* ---------- speeds (numbers from the box) ---------- */
+  var SPEEDS = [
+    { rpm: 1350, ipm: 1600, nm: 110, rate: .36, rot: ".42s" },
+    { rpm: 2000, ipm: 2800, nm: 150, rate: .50, rot: ".30s" },
+    { rpm: 2650, ipm: 3500, nm: 190, rate: .64, rot: ".22s" },
+    { rpm: 3200, ipm: 4000, nm: 230, rate: .80, rot: ".15s" }
+  ];
+
+  /* ---------- simulator ---------- */
+  var stage = $("#stage"), mover = $("#mover"), statusEl = $("#simStatus");
+  var trig = $("#trigger"), trigLabel = $("#trigLabel"), bubbles = $("#bubbles");
+  var dirBtn = $(".dirbtn", stage), panelMark = $(".speed-panel", stage);
+  var TRAVEL = 36;
+  var S = { note: "", dir: "fwd", speed: 1, d: 0, hold: false, impact: false, slip: false, seated: 0, stripped: false, sound: store.get("dr12-sound", true) !== false };
+  var raf = 0, last = 0, bubbleT = 0, msgKey = "", soundSig = "";
+
+  var MSG = {
+    ready: "הבורג מחכה. לחצו והחזיקו את ההדק.",
+    mid: "הבורג באמצע. אפשר להמשיך.",
+    seatedIdle: "הבורג בפנים, בדיוק עד הראש. ככה עוצרים.",
+    lock: "המתג באמצע, אז ההדק נעול. זה המצב הבטוח להחלפת ביט.",
+    free: "הבורג נכנס בקלות. עוד אין התנגדות.",
+    impact: "טרררר! הבורג מתנגד, והפטיש שבפנים נכנס לפעולה. ככה זה אמור להישמע.",
+    stop: "הראש הגיע לעץ. עזבו את ההדק!",
+    stripped: "ראש הבורג נהרס. זה מה שקורה כשממשיכים ללחוץ. נסו בורג חדש.",
+    revImpact: "בהתחלה הבורג תקוע, אז הפטיש עובד גם בשחרור.",
+    revFree: "השתחרר. עכשיו המברגה מאטה לבד, כדי שהבורג לא יעוף.",
+    scenes: "SCENES מפעיל מצבי עבודה נוספים, והפירוט שלהם בחוברת שבקופסה. לעבודה רגילה מספיק SPEED MODE.",
+    out: "הבורג בחוץ. אפשר לעבור להברגה."
+  };
+  var TONE = { stop: "bad", stripped: "bad", lock: "warn" };
+
+  function msgKeyNow(){
+    if (S.note && !S.hold) return S.note;
+    if (S.stripped) return "stripped";
+    if (S.hold) {
+      if (S.dir === "lock") return "lock";
+      if (S.dir === "fwd") return S.d >= 1 ? "stop" : (S.impact ? "impact" : "free");
+      return S.d <= 0 ? "out" : (S.impact ? "revImpact" : "revFree");
+    }
+    if (S.d <= 0) return S.dir === "rev" ? "out" : "ready";
+    if (S.d >= 1) return "seatedIdle";
+    return "mid";
+  }
+
+  function step(dt){
+    var sp = SPEEDS[S.speed - 1];
+    S.slip = false;
+    if (!S.hold || S.dir === "lock") { S.impact = false; return; }
+    if (S.stripped) { S.impact = false; S.slip = true; return; }
+    if (S.dir === "fwd") {
+      if (S.d < 1) {
+        S.impact = S.d > .45;
+        S.d = Math.min(1, S.d + sp.rate * (S.impact ? .5 : 1) * dt);
+      } else {
+        S.impact = true;
+        S.seated += dt;
+        if (S.seated > 1.4) { S.stripped = true; S.impact = false; S.slip = true; }
+      }
+    } else {
+      S.seated = 0;
+      if (S.d > 0) {
+        S.impact = S.d > .62;
+        S.d = Math.max(0, S.d - sp.rate * (S.impact ? .55 : .8) * dt);
+      } else S.impact = false;
+    }
+  }
+
+  function render(){
+    mover.setAttribute("transform", "translate(" + (-TRAVEL * S.d).toFixed(2) + " 0)");
+    var spinning = S.hold && S.dir !== "lock";
+    stage.classList.toggle("is-on", spinning);
+    stage.classList.toggle("is-spin", spinning);
+    stage.classList.toggle("is-rev", S.dir === "rev");
+    stage.classList.toggle("is-impact", spinning && S.impact);
+    stage.classList.toggle("is-slip", spinning && S.slip);
+    stage.classList.toggle("is-stripped", S.stripped);
+    stage.classList.toggle("is-slow", spinning && S.dir === "rev" && !S.impact && S.d > 0);
+    var k = msgKeyNow();
+    if (k !== msgKey) {
+      msgKey = k;
+      statusEl.textContent = MSG[k];
+      if (TONE[k]) statusEl.setAttribute("data-tone", TONE[k]); else statusEl.removeAttribute("data-tone");
+    }
+    var label = !S.hold ? "לחצו והחזיקו את ההדק" : (S.dir === "lock" ? "נעול" : (S.slip ? "מחליק..." : (S.impact ? "טררררר!" : "מסתובב...")));
+    if (trigLabel.textContent !== label) trigLabel.textContent = label;
+    updateSound();
+  }
+
+  function loop(t){
+    var dt = Math.min(.12, Math.max(0, (t - last) / 1000)); last = t;
+    step(dt);
+    if (S.hold && S.dir !== "lock" && (S.impact || S.slip) && !reduce) {
+      bubbleT -= dt;
+      if (bubbleT <= 0) { spawnBubble(); bubbleT = .3 - S.speed * .035; }
+    }
+    render();
+    raf = S.hold ? requestAnimationFrame(loop) : 0;
+  }
+
+  function press(){
+    if (S.hold) return;
+    S.hold = true; S.note = "";
+    trig.classList.add("is-down");
+    trig.classList.remove("hint");
+    audioInit();
+    last = performance.now(); bubbleT = 0;
+    if (!raf) raf = requestAnimationFrame(loop);
+    render();
+  }
+  function release(){
+    if (!S.hold) return;
+    S.hold = false; S.seated = 0; S.impact = false; S.slip = false;
+    trig.classList.remove("is-down");
+    render();
+  }
+  trig.addEventListener("pointerdown", function(e){
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();
+    try { trig.setPointerCapture(e.pointerId); } catch (err) {}
+    press();
+  });
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach(function(ev){ trig.addEventListener(ev, release); });
+  trig.addEventListener("keydown", function(e){ if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); press(); } });
+  trig.addEventListener("keyup", function(e){ if (e.key === " " || e.key === "Enter") { e.preventDefault(); release(); } });
+  trig.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+  trig.addEventListener("blur", release);
+  document.addEventListener("visibilitychange", function(){ if (document.hidden) release(); });
+
+  var WORDS = ["טרררר", "בררררט", "טררט!"];
+  function spawnBubble(){
+    var b = document.createElement("span");
+    b.className = "bubble";
+    b.textContent = WORDS[Math.floor(Math.random() * WORDS.length)];
+    var shift = TRAVEL * S.d / 360 * 100;
+    b.style.left = (24 + Math.random() * 22 - shift).toFixed(1) + "%";
+    b.style.top = (8 + Math.random() * 24).toFixed(1) + "%";
+    b.style.setProperty("--r", (Math.random() * 28 - 14).toFixed(1) + "deg");
+    b.addEventListener("animationend", function(){ b.remove(); });
+    bubbles.appendChild(b);
+    while (bubbles.childElementCount > 5) bubbles.firstElementChild.remove();
+  }
+
+  function setSpeed(n, flash){
+    S.speed = n; S.note = "";
+    $$("[data-speed]").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-speed") === n)); });
+    var sp = SPEEDS[n - 1];
+    $("#rpm").textContent = fmt(sp.rpm);
+    $("#ipm").textContent = fmt(sp.ipm);
+    $("#nm").textContent = sp.nm;
+    stage.style.setProperty("--rot", sp.rot);
+    if (flash) flashEl(panelMark);
+    render();
+  }
+  function flashEl(el){ el.classList.remove("flash"); el.getBoundingClientRect(); el.classList.add("flash"); }
+  [dirBtn, panelMark].forEach(function(el){ el.addEventListener("animationend", function(){ el.classList.remove("flash"); }); });
+  function setDir(d){
+    S.dir = d; S.note = "";
+    $$("[data-dir]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-dir") === d)); });
+    flashEl(dirBtn);
+    render();
+  }
+  $$("[data-speed]").forEach(function(b){ b.addEventListener("click", function(){ setSpeed(+b.getAttribute("data-speed"), true); }); });
+  $("#speedModeBtn").addEventListener("click", function(){ setSpeed(S.speed % 4 + 1, true); });
+  $("#scenesBtn").addEventListener("click", function(){ S.note = "scenes"; flashEl(panelMark); render(); });
+  $$("[data-dir]").forEach(function(b){ b.addEventListener("click", function(){ setDir(b.getAttribute("data-dir")); }); });
+  $("#resetBtn").addEventListener("click", function(){
+    S.d = 0; S.stripped = false; S.seated = 0;
+    if (S.dir === "rev") setDir("fwd"); else render();
+  });
+
+  /* ---------- sound (Web Audio, starts only from a press) ---------- */
+  var A = null;
+  var soundBtn = $("#soundBtn"), soundLabel = $("#soundLabel");
+  function paintSound(){
+    soundBtn.setAttribute("aria-pressed", String(S.sound));
+    soundLabel.textContent = S.sound ? "סאונד פועל" : "סאונד כבוי";
+  }
+  soundBtn.addEventListener("click", function(){
+    S.sound = !S.sound; store.set("dr12-sound", S.sound); paintSound(); updateSound();
+  });
+  function audioInit(){
+    if (!S.sound) return;
+    if (A) { if (A.ctx.state === "suspended") A.ctx.resume(); return; }
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      var ctx = new AC();
+      var master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+      var lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1500;
+      var mg = ctx.createGain(); mg.gain.value = .045; lp.connect(mg); mg.connect(master);
+      var o1 = ctx.createOscillator(); o1.type = "sawtooth"; o1.connect(lp);
+      var o2 = ctx.createOscillator(); o2.type = "triangle"; o2.connect(lp);
+      var len = ctx.sampleRate, buf = ctx.createBuffer(1, len, ctx.sampleRate), ch = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+      var noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
+      var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1700; bp.Q.value = .8;
+      var gate = ctx.createGain(); gate.gain.value = .5;
+      var lfo = ctx.createOscillator(); lfo.type = "square"; lfo.frequency.value = 26;
+      var depth = ctx.createGain(); depth.gain.value = .5; lfo.connect(depth); depth.connect(gate.gain);
+      var ig = ctx.createGain(); ig.gain.value = 0;
+      noise.connect(bp); bp.connect(gate); gate.connect(ig); ig.connect(master);
+      o1.start(); o2.start(); noise.start(); lfo.start();
+      A = { ctx: ctx, master: master, o1: o1, o2: o2, ig: ig, lfo: lfo };
+      soundSig = "";
+    } catch (e) { A = null; }
+  }
+  function updateSound(){
+    if (!A) return;
+    var on = S.sound && S.hold && S.dir !== "lock";
+    var hit = on && (S.impact || S.slip);
+    var slow = on && S.dir === "rev" && !S.impact && S.d > 0;
+    var sig = [on, hit, slow, S.speed].join("|");
+    if (sig === soundSig) return;
+    soundSig = sig;
+    var t = A.ctx.currentTime, sp = SPEEDS[S.speed - 1], f = (70 + sp.rpm / 28) * (slow ? .62 : 1);
+    A.o1.frequency.setTargetAtTime(f, t, .04);
+    A.o2.frequency.setTargetAtTime(f * 2.02, t, .04);
+    A.lfo.frequency.setTargetAtTime(sp.ipm / 60, t, .04);
+    A.master.gain.setTargetAtTime(on ? .7 : 0, t, on ? .02 : .05);
+    A.ig.gain.setTargetAtTime(hit ? .45 : 0, t, .02);
+  }
+
+  /* ---------- charger check ---------- */
+  var VERDICT = {
+    wide: { tone: "good", html: "<strong>מעולה.</strong> המטען עובד גם על 230V של הבית. צריך רק מתאם פשוט מתקע אמריקאי לשקע ישראלי, יש כזה בכל חנות חשמל. לא צריך שנאי." },
+    us: { tone: "bad", html: "<strong>לא לחבר לשקע.</strong> המתח בבית הוא 230V, והוא ישרוף את המטען. צריך שנאי שמוריד ל-110V, או מטען תואם שמתאים ל-230V." },
+    none: { tone: "warn", html: "המתח מודפס באותיות קטנות על גוף המטען, בדרך כלל ליד <bdi dir=\"ltr\">INPUT</bdi>. עד שמוצאים <bdi dir=\"ltr\">100-240V</bdi>, לא מחברים." }
+  };
+  var verdict = $("#verdict");
+  $$("[data-volt]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var v = b.getAttribute("data-volt");
+      $$("[data-volt]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      verdict.setAttribute("data-tone", VERDICT[v].tone);
+      verdict.innerHTML = VERDICT[v].html;
+    });
+  });
+
+  /* ---------- checklist ---------- */
+  var done = {};
+  (store.get("dr12-steps", []) || []).forEach(function(n){ done[n] = true; });
+  var boxes = $$(".steps input[type=checkbox]");
+  function paintSteps(){
+    var count = 0;
+    boxes.forEach(function(inp){
+      var on = !!done[inp.getAttribute("data-step")];
+      inp.checked = on;
+      inp.closest(".step").classList.toggle("is-done", on);
+      if (on) count++;
+    });
+    $("#allDone").hidden = count < boxes.length;
+  }
+  boxes.forEach(function(inp){
+    inp.addEventListener("change", function(){
+      var n = inp.getAttribute("data-step");
+      if (inp.checked) done[n] = true; else delete done[n];
+      store.set("dr12-steps", Object.keys(done));
+      paintSteps();
+    });
+  });
+  $("#clearSteps").addEventListener("click", function(){ done = {}; store.set("dr12-steps", []); paintSteps(); });
+
+  /* ---------- parts ---------- */
+  var PARTS = [
+    { name: "ראש תפיסה מהיר", text: "כאן נכנסים הביטים: זנב משושה של 1/4 אינץ׳ (6.35 מ״מ). מושכים את הטבעת קדימה, מכניסים או מוציאים ביט, ומשחררים.", a: [150, 92], p: [150, 66] },
+    { name: "פנס LED", text: "נדלק יחד עם ההדק ומאיר את הבורג. אין לו כפתור משלו. שימושי בתוך ארונות ובפינות חשוכות.", a: [216, 154], p: [180, 174] },
+    { name: "מתג כיוון", text: "לחיצה מצד אחד מבריגה, מהצד השני משחררת, ובמצב האמצעי ההדק נעול. לא בטוחים לאיזה צד? לחיצה קצרה באוויר, ומסתכלים לאן הביט מסתובב. בשחרור המברגה מאטה לבד כשהבורג משתחרר, כדי שלא יעוף.", a: [274, 165], p: [320, 190] },
+    { name: "הדק", text: "ככל שלוחצים עמוק יותר, הוא מסתובב מהר יותר, עד המהירות שנבחרה. בתחילת בורג לוחצים בעדינות.", a: [226, 196], p: [186, 214] },
+    { name: "לוח המהירויות", text: "על הבסיס, מלפנים. כל לחיצה על SPEED MODE עוברת למהירות הבאה, והנוריות שבאמצע מראות איזו נבחרה. הכפתור השני, SCENES, מפעיל מצבי עבודה נוספים, והפירוט שלהם בחוברת שבקופסה.", a: [236, 268], p: [196, 252] },
+    { name: "סוללה ומד טעינה", text: "סוללת ליתיום, 21V ו-2.0Ah, ובערכה יש שתיים. לחיצה על הכפתור שבחזית הסוללה מדליקה ארבעה פסים שמראים כמה טעינה נשארה. התקע העגול של המטען נכנס לשקע הטעינה שבסוללה.", a: [246, 311], p: [252, 346] },
+    { name: "תפס הסוללה", text: "לוחצים עליו ומחליקים את הסוללה החוצה. מכניסים בחזרה עד שנשמע קליק.", a: [223, 292], p: [184, 296] }
+  ];
+  var VB = { x: 70, y: 50, w: 290, h: 310 };
+  var partsSvg = $("#partsSvg"), partsFig = $("#partsFig"), partChips = $("#partChips");
+  partsSvg.appendChild($(".drill-body", stage).cloneNode(true));
+  PARTS.forEach(function(p, i){
+    var n = i + 1;
+    partsSvg.appendChild(svgEl("line", { "class": "leader", "data-part": n, x1: p.a[0], y1: p.a[1], x2: p.p[0], y2: p.p[1] }));
+    partsSvg.appendChild(svgEl("circle", { "class": "anchor", "data-part": n, cx: p.a[0], cy: p.a[1], r: 3.5 }));
+    var pin = document.createElement("button");
+    pin.type = "button"; pin.className = "pin"; pin.textContent = n;
+    pin.setAttribute("data-part", n);
+    pin.setAttribute("aria-label", n + ": " + p.name);
+    pin.style.left = ((p.p[0] - VB.x) / VB.w * 100).toFixed(2) + "%";
+    pin.style.top = ((p.p[1] - VB.y) / VB.h * 100).toFixed(2) + "%";
+    pin.addEventListener("click", function(){ selectPart(n); });
+    partsFig.appendChild(pin);
+    var chip = document.createElement("button");
+    chip.type = "button"; chip.className = "chip"; chip.textContent = n + " · " + p.name;
+    chip.setAttribute("data-part", n);
+    chip.addEventListener("click", function(){ selectPart(n); });
+    partChips.appendChild(chip);
+  });
+  function selectPart(n){
+    $$(".pin, #partChips .chip").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-part") === n)); });
+    $$(".leader, .anchor", partsSvg).forEach(function(el){ el.classList.toggle("on", +el.getAttribute("data-part") === n); });
+    var p = PARTS[n - 1];
+    $("#partNum").textContent = n;
+    $("#partName").textContent = p.name;
+    $("#partText").textContent = p.text;
+  }
+  selectPart(1);
+
+  /* ---------- which speed for which job ---------- */
+  var TASKS = {
+    furniture: { speed: 1, dir: "fwd", bit: "לפי הבורג. ברוב הרהיטים: פיליפס PH2 או אלן (משושה).",
+      tips: ["לוח סיבית נהרס מהר. מבריגים כמעט עד הסוף, ואת הסיבוב האחרון עושים ביד.", "ברגים קטנים או בפלסטיק: לחיצה עדינה מאוד על ההדק."] },
+    wall: { speed: 1, dir: "fwd", bit: "לרוב פיליפס PH2, לפי הבורג שמגיע עם הדיבל.",
+      tips: ["בקיר בטון או בלוקים את החור קודחים עם מקדחה רוטטת. האימפקט לא קודח בבטון.", "מכניסים דיבל, ואז את הבורג בעדינות, כדי שהדיבל לא יסתובב בתוך החור.", "לפני שקודחים: מוודאים שאין בקו של הנקודה חשמל או צנרת, במיוחד מעל ומתחת לשקעים ולמפסקים."] },
+    wood: { speed: 2, dir: "fwd", bit: "פיליפס PH2, פוזידרייב PZ2 או טורקס, לפי הראש של הבורג.",
+      tips: ["מתחילים בלחיצה עדינה עד שהבורג תופס, ואז מגבירים.", "בעץ קשה או קרוב לקצה: קודם קודחים חור מוביל דק, כדי שהעץ לא ייסדק."] },
+    long: { speed: 4, dir: "fwd", bit: "בדרך כלל טורקס (כוכב), לפי הבורג.",
+      tips: ["כאן האימפקט בשיא שלו. דוחפים חזק פנימה, בקו ישר עם הבורג.", "אם הבורג נעצר באמצע, חור מוביל יעזור יותר מעוד כוח."] },
+    stuck: { speed: 4, dir: "rev", bit: "ביט חדש, בגודל המדויק של הראש.",
+      tips: ["זה הצד החזק של אימפקט: המכות משחררות מה שיד לא מזיזה.", "דוחפים חזק פנימה, ורק אז לוחצים על ההדק.", "ראש שכבר התעגל לא מנסים שוב. משחררים אותו עם מחלץ ברגים."] },
+    drill: { speed: 3, dir: "fwd", bit: "מקדח עם זנב משושה של 1/4 אינץ׳. מקדח עם זנב עגול לא ייכנס.",
+      tips: ["מתחילים לאט כדי שהמקדח לא יחליק, ואז מגבירים.", "בטון, בלוקים ואריחים: רק מקדחה רוטטת."] }
+  };
+  var DIRNAME = { fwd: "הברגה", rev: "שחרור" };
+  var taskCard = $("#taskCard");
+  var esc = function(s){ return s.replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; }); };
+  function selectTask(id){
+    var t = TASKS[id], sp = SPEEDS[t.speed - 1];
+    $$("#taskChips .chip").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-task") === id)); });
+    var gauge = "";
+    for (var i = 1; i <= 4; i++) gauge += "<i" + (i <= t.speed ? " class=\"on\"" : "") + "></i>";
+    taskCard.innerHTML =
+      "<div class=\"tc-head\">" +
+        "<div class=\"tc-speed\" role=\"img\" aria-label=\"מהירות " + t.speed + "\"><span class=\"tc-num\">" + t.speed + "</span><span class=\"tc-lab\">מהירות</span></div>" +
+        "<div class=\"tc-meta\"><div class=\"gauge\" aria-hidden=\"true\">" + gauge + "</div>" +
+          "<p>עד <b class=\"num\">" + fmt(sp.rpm) + "</b> סל״ד · <b class=\"num\">" + sp.nm + "</b> נ״מ</p>" +
+          "<p>כיוון: <b>" + DIRNAME[t.dir] + "</b></p></div>" +
+      "</div>" +
+      "<p><b>ביט:</b> " + esc(t.bit) + "</p>" +
+      "<ul class=\"dots\">" + t.tips.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
+      "<button type=\"button\" class=\"btn\" id=\"tryTask\">לנסות בסימולטור</button>";
+    $("#tryTask").addEventListener("click", function(){
+      release();
+      S.stripped = false; S.seated = 0;
+      S.d = t.dir === "rev" ? 1 : 0;
+      setSpeed(t.speed, true);
+      setDir(t.dir);
+      $("#sim").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  }
+  $$("#taskChips .chip").forEach(function(b){ b.addEventListener("click", function(){ selectTask(b.getAttribute("data-task")); }); });
+  selectTask("wood");
+
+  /* ---------- copy support address ---------- */
+  var copyNote = $("#copyNote");
+  $("#copyMail").addEventListener("click", function(){
+    var txt = $("#mail").textContent;
+    var fallback = function(){
+      try { var r = document.createRange(); r.selectNodeContents($("#mail")); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+      copyNote.textContent = "סומן, אפשר להעתיק";
+    };
+    try {
+      navigator.clipboard.writeText(txt).then(function(){ copyNote.textContent = "הועתק"; }, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  /* ---------- start ---------- */
+  paintSound();
+  paintSteps();
+  setSpeed(1);
+  render();
+})();
+</script>
+</body>
+</html>
