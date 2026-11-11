@@ -249,6 +249,16 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
 .photo.base img{max-width:300px}
 .photo figcaption{font-size:.88rem;color:var(--muted);text-align:center;max-width:44ch;text-wrap:balance}
 
+/* panel icons, mode line, SCENES list */
+.leds .ico{width:14px;height:10px;display:block;flex:none;fill:currentColor;opacity:.9}
+.mode-line{color:var(--lime-ink);font-weight:800}
+.scene-list{list-style:none;margin:0;padding:0;display:grid}
+.scene-list li{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;padding-block:12px;border-top:1.5px dashed var(--line)}
+.scene-list li:first-child{border-top:0;padding-top:4px}
+.sc-n{width:40px;height:40px;border-radius:50%;border:2px solid var(--edge);background:var(--tool);color:var(--lime);display:grid;place-items:center;font-family:var(--f-mono);font-size:1.05rem;font-weight:600}
+.sc-name{font-weight:800}
+.sc-en{display:inline-block;white-space:nowrap;font-family:var(--f-mono);font-size:.75rem;font-weight:600;color:var(--lime-ink);margin-right:8px}
+
 /* kit accessories */
 .acc-fig{position:relative;width:min(100%, 460px);margin-inline:auto;border:2px solid var(--edge);border-radius:18px;overflow:hidden}
 .acc-fig img{display:block;width:100%;height:auto}
@@ -508,17 +518,18 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
             <span class="plab">SCENES</span>
           </button>
           <div class="leds">
-            <button type="button" data-speed="4" aria-pressed="false" aria-label="מהירות 4"><i></i><span>4</span></button>
-            <button type="button" data-speed="3" aria-pressed="false" aria-label="מהירות 3"><i></i><span>3</span></button>
-            <button type="button" data-speed="2" aria-pressed="false" aria-label="מהירות 2"><i></i><span>2</span></button>
-            <button type="button" data-speed="1" aria-pressed="true" aria-label="מהירות 1"><i></i><span>1</span></button>
+            <button type="button" data-speed="4" aria-pressed="false" aria-label="מהירות 4"><svg class="ico" viewBox="0 0 16 12" aria-hidden="true"><path d="M12.6 6.6a4.6 4.6 0 1 1-1.5-4.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M11.9 0.6l-.6 2.3-2.3-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><i></i><span>4</span></button>
+            <button type="button" data-speed="3" aria-pressed="false" aria-label="מהירות 3"><svg class="ico" viewBox="0 0 16 12" aria-hidden="true"><rect x="0.5" y="1.5" width="3" height="9" rx="1"/><rect x="3.5" y="3" width="9" height="6" rx="1"/><polygon points="12.5,3 15.5,6 12.5,9"/></svg><i></i><span>3</span></button>
+            <button type="button" data-speed="2" aria-pressed="false" aria-label="מהירות 2"><svg class="ico" viewBox="0 0 16 12" aria-hidden="true"><rect x="0.5" y="2.5" width="3" height="7" rx="1"/><rect x="3.5" y="4.6" width="9" height="2.8" rx="1"/><polygon points="12.5,4.6 15,6 12.5,7.4"/></svg><i></i><span>2</span></button>
+            <button type="button" data-speed="1" aria-pressed="true" aria-label="מהירות 1"><svg class="ico" viewBox="0 0 16 12" aria-hidden="true"><rect x="0.5" y="2.5" width="3" height="7" rx="1"/><path d="M3.5 6h1l1-2.6 1.2 5.2 1.2-5.2 1.2 5.2 1.2-5.2 1.2 5.2 1-2.6h2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><i></i><span>1</span></button>
           </div>
           <button type="button" class="pbtn" id="speedModeBtn" aria-label="SPEED MODE: מעבר למהירות הבאה">
             <span class="pcirc"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 14.5a6.5 6.5 0 1 1 13 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M10 14.5l3.6-4.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
             <span class="plab">SPEED MODE</span>
           </button>
         </div>
-        <p class="readout"><span class="nw">עד <b id="rpm">1,350</b> סל״ד</span> · <span class="nw"><b id="ipm">1,600</b> מכות</span> · <span class="nw"><b id="nm">110</b> נ״מ</span></p>
+        <p class="readout mode-line" id="modeLine" hidden></p>
+        <p class="readout" id="readout"><span class="nw">עד <b id="rpm">1,350</b> סל״ד</span> · <span class="nw"><b id="ipm">1,600</b> מכות</span> · <span class="nw"><b id="nm">110</b> נ״מ</span></p>
       </div>
       <button type="button" class="trigger hint" id="trigger"><span id="trigLabel">לחצו והחזיקו את ההדק</span></button>
       <div class="sim-foot">
@@ -560,11 +571,11 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       </li>
       <li class="step">
         <label class="step-head"><input class="vh" type="checkbox" id="step2" data-step="2"><span class="box" aria-hidden="true"></span><span class="step-n">2</span><span class="step-title">טוענים את הסוללה</span></label>
-        <div class="step-body"><p>את התקע העגול שבקצה הכבל של המטען מכניסים לשקע הטעינה שבסוללה. לפני העבודה הראשונה טוענים עד הסוף, על משטח קשה, רחוק מבדים, מניירות ומשמש ישירה. בערכה יש שתי סוללות, אז אחת יכולה להיטען בזמן שעובדים עם השנייה.</p></div>
+        <div class="step-body"><p>את התקע העגול שבקצה הכבל של המטען מכניסים לשקע הטעינה שבסוללה. הנורית של המטען אדומה בזמן הטעינה, וירוקה כשהסוללה מלאה. לפני השימוש הראשון טוענים עד הסוף, והסוללה צריכה להיות נקייה ויבשה. מטעינים על משטח קשה, רחוק מבדים, מניירות ומשמש ישירה. בסוף מנתקים את המטען מהקיר ואת הסוללה מהמטען.</p><p>בערכה יש שתי סוללות, אז אחת יכולה להיטען בזמן שעובדים עם השנייה.</p></div>
       </li>
       <li class="step">
         <label class="step-head"><input class="vh" type="checkbox" id="step3" data-step="3"><span class="box" aria-hidden="true"></span><span class="step-n">3</span><span class="step-title">מכניסים את הסוללה</span></label>
-        <div class="step-body"><p>מחליקים אותה לבסיס הידית עד שנשמע קליק. לחיצה על הכפתור שבחזית הסוללה מדליקה ארבעה פסים ירוקים שמראים כמה טעינה נשארה.</p></div>
+        <div class="step-body"><p>מיישרים את חזית הסוללה עם החריץ שבבסיס, ומחליקים פנימה עד שנשמע קליק. כדי להוציא: לחיצה ארוכה על התפס שבחזית הסוללה, ומושכים אותה ישר החוצה. לחיצה על הכפתור עם סמל ההפעלה מדליקה ארבעה פסים ירוקים שמראים כמה טעינה נשארה.</p></div>
       </li>
       <li class="step">
         <label class="step-head"><input class="vh" type="checkbox" id="step4" data-step="4"><span class="box" aria-hidden="true"></span><span class="step-n">4</span><span class="step-title">מכניסים ביט</span></label>
@@ -572,7 +583,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       </li>
       <li class="step">
         <label class="step-head"><input class="vh" type="checkbox" id="step5" data-step="5"><span class="box" aria-hidden="true"></span><span class="step-n">5</span><span class="step-title">בוחרים כיוון ומהירות</span></label>
-        <div class="step-body"><p>המתג שמעל ההדק קובע את הכיוון, ובמצב האמצעי הוא נועל. את המהירות בוחרים בלוח שעל הבסיס, מלפנים: כל לחיצה על <bdi dir="ltr">SPEED MODE</bdi> עוברת למהירות הבאה, והנורית מראה איזו נבחרה. מתחילים ב-1 ועולים רק אם צריך. <a href="#speed">איזו מהירות לאיזו עבודה</a></p></div>
+        <div class="step-body"><p>המתג שמעל ההדק קובע את הכיוון, ובמצב האמצעי הוא נועל. מחליפים כיוון רק כשהמנוע עומד לגמרי.</p><p>את המהירות בוחרים בלוח שעל הבסיס, מלפנים: כל לחיצה על <bdi dir="ltr">SPEED MODE</bdi> עוברת לרמה הבאה, והנורית מראה איזו נבחרה. הלוח כבוי? לוחצים פעם אחת על ההדק והוא נדלק. מתחילים ב-1 ועולים רק אם צריך. <a href="#speed">איזו מהירות לאיזו עבודה</a></p></div>
       </li>
       <li class="step">
         <label class="step-head"><input class="vh" type="checkbox" id="step6" data-step="6"><span class="box" aria-hidden="true"></span><span class="step-n">6</span><span class="step-title">מתחילים לאט</span></label>
@@ -628,6 +639,15 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       <li><span class="sp-n">4</span><span class="sp-u">ברגים ארוכים, קורות, בורג תקוע</span><span class="sp-v"><b>3,200</b> סל״ד · <b>4,000</b> מכות · <b>230</b> נ״מ</span></li>
     </ol>
     <p class="note">סל״ד ומכות לדקה מהקופסה: סיבובים בלי עומס, ומכות כשהפטיש עובד. המומנט, כלומר כוח הסיבוב המרבי בניוטון מטר (נ״מ), לפי דף המוצר.</p>
+    <h3 id="scenes">המצבים של <bdi dir="ltr">SCENES</bdi></h3>
+    <p class="sub">הכפתור השני בלוח. במקום מהירות קבועה, המברגה משנה מהירות לבד לפי מה שקורה לבורג. הנורית שליד הסמל מראה איזה מצב נבחר.</p>
+    <ol class="scene-list">
+      <li><span class="sc-n">1</span><div><p class="sc-name">בורג מתברג<span class="sc-en" dir="ltr">Self-tapping</span></p><p>מתחיל לאט, כדי שהבורג ייכנס במדויק לחור שנקדח מראש, ואחר כך עובר למהירות מלאה. ככה הבורג לא נכנס עקום.</p></div></li>
+      <li><span class="sc-n">2</span><div><p class="sc-name">פח דק<span class="sc-en" dir="ltr">Thin sheet metal</span></p><p>מהיר, ונעצר לבד ברגע שהפטיש מתחיל לעבוד, כדי לא להרוס את הבורג ואת המשטח.</p></div></li>
+      <li><span class="sc-n">3</span><div><p class="sc-name">פח עבה<span class="sc-en" dir="ltr">Thick sheet metal</span></p><p>מהיר, וברגע שהפטיש מתחיל יורד ל-20% מהמהירות. להברגה מדויקת במתכת עבה, בלי להרוס את הבורג.</p></div></li>
+      <li><span class="sc-n">4</span><div><p class="sc-name">האטה בשחרור<span class="sc-en" dir="ltr">Loosening speed reduction</span></p><p>בשחרור, כשהמברגה מזהה שהאום או הבורג השתחררו לגמרי, היא יורדת לבד ממהירות גבוהה לנמוכה, כדי שהם לא יעופו. לחיצה על <bdi dir="ltr">SCENES</bdi> בזמן שחרור מכבה את ההאטה ועוברת לעבודה רציפה.</p></div></li>
+    </ol>
+    <p class="note">מצבים 1 עד 3 עובדים רק בהברגה. את כולם אפשר לנסות בסימולטור למעלה.</p>
   </section>
 
   <section class="sheet" id="bits" aria-labelledby="bitsTitle">
@@ -691,20 +711,25 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       </details>
       <details>
         <summary>מה עושה הכפתור <bdi dir="ltr">SCENES</bdi>?</summary>
-        <div class="ans"><p>הוא מחליף בין מצבי עבודה מוכנים, והסמלים שליד הנוריות (A וכמה סוגי ברגים) מראים איזה מצב נבחר. דף המוצר מפרט אחד מהם, מצב נגד העפה: בשחרור, ברגע שהבורג משתחרר, המהירות יורדת ל-800 סל״ד, כדי שהבורג לא יעוף.</p></div>
+        <div class="ans"><p>הוא בוחר מצב שבו המברגה משנה מהירות לבד: בהברגה בורג מתברג, פח דק ופח עבה, ובשחרור האטה כשהבורג משתחרר. <a href="#scenes">ההסבר המלא על כל מצב</a></p></div>
       </details>
       <details>
         <summary>בשחרור היא פתאום מאטה</summary>
-        <div class="ans"><p>זה מכוון. במצב נגד העפה המברגה יורדת ל-800 סל״ד ברגע שהבורג משתחרר, כדי שהבורג או האום לא יעופו.</p></div>
+        <div class="ans"><p>זו ההאטה בשחרור, והיא מכוונת: כשהבורג או האום משתחררים, המהירות יורדת לבד כדי שהם לא יעופו. רוצים עבודה רציפה? בזמן שחרור לוחצים על <bdi dir="ltr">SCENES</bdi>.</p></div>
       </details>
       <details>
         <summary>לוחצים על ההדק ולא קורה כלום</summary>
         <div class="ans"><ul class="dots">
           <li>מתג הכיוון באמצע? זה מצב נעילה.</li>
-          <li>הסוללה ריקה? הכפתור שבחזית הסוללה יגיד.</li>
           <li>הסוללה לא נכנסה עד הקליק.</li>
-          <li>אחרי עומס כבד המברגה יכולה לכבות כדי להגן על עצמה. מחכים כמה דקות שתתקרר.</li>
+          <li>הסוללה כמעט ריקה: המברגה עוצרת לבד כדי להגן עליה. מוציאים ומטעינים.</li>
+          <li>עומס חריג: המברגה עוצרת. עוזבים את ההדק, מפסיקים את מה שגרם לעומס, ומתחילים שוב.</li>
+          <li>המברגה או הסוללה התחממו: היא עוצרת עד שהן מתקררות. מחכים כמה דקות.</li>
         </ul></div>
+      </details>
+      <details>
+        <summary>הנוריות בלוח כבויות</summary>
+        <div class="ans"><p>זה תקין: הלוח נכבה כדי לחסוך בסוללה. לחיצה אחת על ההדק מדליקה אותו, ואז אפשר לבחור מהירות או מצב. אחרי שעוזבים את ההדק יש בערך דקה לשנות. כדי לראות באיזו רמה המברגה, לוחצים על ההדק כשהיא לא בעומס.</p></div>
       </details>
       <details>
         <summary>הביט נופל או לא ננעל</summary>
@@ -745,6 +770,8 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
           <li>משקפי מגן. שבבים וקצוות של ברגים עפים.</li>
           <li>היד השנייה רחוק מהביט, וגם מהצד השני של הלוח, איפה שהבורג עלול לצאת.</li>
           <li>מחליפים ביט כשהמתג באמצע (נעול), או בלי סוללה.</li>
+          <li>מחליפים כיוון רק כשהמנוע עומד לגמרי. וכשמניחים את המברגה, המתג באמצע.</li>
+          <li>לא מסתכלים ישר לתוך הפנס.</li>
           <li>לפני קידוח בקיר: מוודאים שאין שם חשמל או צנרת.</li>
           <li>לא בגשם, ולא עם ידיים רטובות.</li>
           <li>שיער ארוך אסוף, ובלי שרוולים רחבים או תכשיטים ליד הראש המסתובב.</li>
@@ -755,10 +782,10 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
         <ul class="dots">
           <li>לא משאירים ברכב בקיץ, ולא בשמש.</li>
           <li>מטעינים על משטח קשה, ולא משאירים בטעינה כל הלילה בלי השגחה.</li>
-          <li>לאחסון ארוך: מוציאים את הסוללה מהמברגה, טעונה בערך עד חצי, ושומרים במקום יבש.</li>
+          <li>לאחסון: מוציאים את הסוללה מהמברגה ושומרים במקום יבש. סוללה שלא בשימוש טוענים לפחות פעם בשלושה חודשים.</li>
           <li>סוללה נפוחה, סדוקה או עם ריח מוזר: לא מטעינים. מעבירים למחזור סוללות.</li>
           <li>המטען הזה רק לסוללות האלה, והסוללות רק למטען הזה.</li>
-          <li>ניקוי: מטלית לחה, בלי חומרים חריפים. את פתחי האוורור שומרים נקיים.</li>
+          <li>בדיקה וניקוי: רק כשהמברגה כבויה ובלי סוללה. מטלית לחה, בלי בנזין, טינר, אלכוהול או ממיסים אחרים. פתחי האוורור צריכים להישאר נקיים.</li>
         </ul>
       </div>
     </div>
@@ -767,7 +794,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
 </main>
 
 <footer class="wrap foot">
-  <p>מדריך לא רשמי. נכתב לפי הקופסה, תמונות המוצר ודף המוצר. אם משהו כאן סותר את החוברת שבקופסה, החוברת קובעת. לפי דף המוצר, האחריות לשלוש שנים.</p>
+  <p>מדריך לא רשמי. נכתב לפי החוברת שבקופסה, הקופסה עצמה ודף המוצר. לפי דף המוצר, האחריות לשלוש שנים.</p>
   <div class="mailrow">
     <span>שירות לקוחות של היצרן, לפי הקופסה:</span>
     <span class="mail" id="mail" dir="ltr">support@robustrue.com</span>
@@ -805,7 +832,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
   var trig = $("#trigger"), trigLabel = $("#trigLabel"), bubbles = $("#bubbles");
   var dirBtn = $(".dirbtn", stage), panelMark = $(".speed-panel", stage);
   var TRAVEL = 36;
-  var S = { note: "", dir: "fwd", speed: 1, d: 0, hold: false, impact: false, slip: false, seated: 0, stripped: false, sound: store.get("dr12-sound", true) !== false };
+  var S = { note: "", scene: 0, revSlow: true, stopped: false, dir: "fwd", speed: 1, d: 0, hold: false, impact: false, slip: false, seated: 0, stripped: false, sound: store.get("dr12-sound", true) !== false };
   var raf = 0, last = 0, bubbleT = 0, msgKey = "", soundSig = "";
 
   var MSG = {
@@ -819,33 +846,65 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
     stripped: "ראש הבורג נהרס. זה מה שקורה כשממשיכים ללחוץ. נסו בורג חדש.",
     revImpact: "בהתחלה הבורג תקוע, אז הפטיש עובד גם בשחרור.",
     revFree: "השתחרר. עכשיו המברגה מאטה לבד, כדי שהבורג לא יעוף.",
-    scenes: "SCENES מחליף בין מצבי עבודה מוכנים, והסמלים שליד הנוריות מראים איזה מצב נבחר. אחד מהם הוא מצב נגד העפה: בשחרור, ברגע שהבורג משתחרר, המהירות יורדת ל-800 סל״ד כדי שלא יעוף.",
+    scene1: "מצב 1, בורג מתברג: מתחיל לאט כדי שהבורג ייכנס במדויק לחור, ואחר כך עובר למהירות מלאה. נסו.",
+    scene2: "מצב 2, פח דק: מהיר, ונעצר לבד ברגע שהפטיש מתחיל, כדי לא להרוס את הבורג ואת הפח. נסו.",
+    scene3: "מצב 3, פח עבה: מהיר, וברגע שהפטיש מתחיל יורד ל-20% מהמהירות. נסו.",
+    revSlowOn: "האטה בשחרור פעילה: כשהבורג משתחרר, המהירות יורדת לבד כדי שהוא לא יעוף.",
+    revSlowOff: "האטה בשחרור כבויה: עבודה רציפה. עוד לחיצה על SCENES מחזירה אותה.",
+    sceneLock: "המצבים של SCENES עובדים בהברגה ובשחרור. בחרו קודם כיוון.",
+    dirBusy: "עצרו! מחליפים כיוון רק כשהמנוע עומד לגמרי. החלפה בזמן סיבוב מזיקה למברגה.",
+    s1slow: "מתחיל לאט, כדי שהבורג ייכנס ישר לחור.",
+    s1fast: "הבורג תפס, ועכשיו מהירות מלאה.",
+    s2stop: "נעצרה לבד ברגע שהפטיש התחיל. ככה הפח והבורג נשארים שלמים. עזבו את ההדק.",
+    s3slow: "הפטיש התחיל, והמהירות ירדה ל-20%. בורג במתכת עבה נכנס בלי להיהרס.",
+    revFast: "בלי האטה, הבורג יוצא מהר, ועלול לעוף.",
     out: "הבורג בחוץ. אפשר לעבור להברגה."
   };
-  var TONE = { stop: "bad", stripped: "bad", lock: "warn" };
+  var TONE = { stop: "bad", stripped: "bad", lock: "warn", dirBusy: "bad", sceneLock: "warn", revFast: "warn" };
 
   function msgKeyNow(){
+    if (S.note === "dirBusy") return "dirBusy";
     if (S.note && !S.hold) return S.note;
     if (S.stripped) return "stripped";
     if (S.hold) {
       if (S.dir === "lock") return "lock";
-      if (S.dir === "fwd") return S.d >= 1 ? "stop" : (S.impact ? "impact" : "free");
-      return S.d <= 0 ? "out" : (S.impact ? "revImpact" : "revFree");
+      if (S.dir === "fwd") {
+        if (S.stopped) return "s2stop";
+        if (S.d >= 1) return "stop";
+        if (S.scene === 3 && S.impact) return "s3slow";
+        if (S.scene === 1 && !S.impact) return S.d < .3 ? "s1slow" : "s1fast";
+        return S.impact ? "impact" : "free";
+      }
+      if (S.d <= 0) return "out";
+      if (S.impact) return "revImpact";
+      return S.revSlow ? "revFree" : "revFast";
     }
     if (S.d <= 0) return S.dir === "rev" ? "out" : "ready";
     if (S.d >= 1) return "seatedIdle";
     return "mid";
   }
 
+  function slowNow(){
+    if (!S.hold || S.dir === "lock" || S.stopped) return false;
+    if (S.dir === "rev") return S.revSlow && !S.impact && S.d > 0;
+    return (S.scene === 3 && S.impact) || (S.scene === 1 && S.d < .3);
+  }
+
   function step(dt){
-    var sp = SPEEDS[S.speed - 1];
+    var sp = SPEEDS[S.speed - 1], top = SPEEDS[3];
     S.slip = false;
     if (!S.hold || S.dir === "lock") { S.impact = false; return; }
     if (S.stripped) { S.impact = false; S.slip = true; return; }
     if (S.dir === "fwd") {
+      if (S.stopped) { S.impact = false; return; }
       if (S.d < 1) {
-        S.impact = S.d > .45;
-        S.d = Math.min(1, S.d + sp.rate * (S.impact ? .5 : 1) * dt);
+        S.impact = S.d > (S.scene === 2 ? .92 : .45);
+        if (S.scene === 2 && S.impact) { S.stopped = true; S.impact = false; return; }
+        var rate = sp.rate * (S.impact ? .5 : 1);
+        if (S.scene === 1) rate = S.d < .3 ? SPEEDS[0].rate * .7 : top.rate * (S.impact ? .5 : 1);
+        if (S.scene === 2) rate = top.rate;
+        if (S.scene === 3) rate = S.impact ? top.rate * .2 : top.rate;
+        S.d = Math.min(1, S.d + rate * dt);
       } else {
         S.impact = true;
         S.seated += dt;
@@ -855,28 +914,28 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
       S.seated = 0;
       if (S.d > 0) {
         S.impact = S.d > .62;
-        S.d = Math.max(0, S.d - sp.rate * (S.impact ? .55 : .8) * dt);
+        S.d = Math.max(0, S.d - sp.rate * (S.impact ? .55 : (S.revSlow ? .8 : 1.6)) * dt);
       } else S.impact = false;
     }
   }
 
   function render(){
     mover.setAttribute("transform", "translate(" + (-TRAVEL * S.d).toFixed(2) + " 0)");
-    var spinning = S.hold && S.dir !== "lock";
+    var spinning = S.hold && S.dir !== "lock" && !S.stopped;
     stage.classList.toggle("is-on", spinning);
     stage.classList.toggle("is-spin", spinning);
     stage.classList.toggle("is-rev", S.dir === "rev");
     stage.classList.toggle("is-impact", spinning && S.impact);
     stage.classList.toggle("is-slip", spinning && S.slip);
     stage.classList.toggle("is-stripped", S.stripped);
-    stage.classList.toggle("is-slow", spinning && S.dir === "rev" && !S.impact && S.d > 0);
+    stage.classList.toggle("is-slow", slowNow());
     var k = msgKeyNow();
     if (k !== msgKey) {
       msgKey = k;
       statusEl.textContent = MSG[k];
       if (TONE[k]) statusEl.setAttribute("data-tone", TONE[k]); else statusEl.removeAttribute("data-tone");
     }
-    var label = !S.hold ? "לחצו והחזיקו את ההדק" : (S.dir === "lock" ? "נעול" : (S.slip ? "מחליק..." : (S.impact ? "טררררר!" : "מסתובב...")));
+    var label = !S.hold ? "לחצו והחזיקו את ההדק" : (S.dir === "lock" ? "נעול" : (S.stopped ? "נעצרה לבד" : (S.slip ? "מחליק..." : (S.impact ? "טררררר!" : "מסתובב..."))));
     if (trigLabel.textContent !== label) trigLabel.textContent = label;
     updateSound();
   }
@@ -904,7 +963,7 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
   }
   function release(){
     if (!S.hold) return;
-    S.hold = false; S.seated = 0; S.impact = false; S.slip = false;
+    S.hold = false; S.seated = 0; S.impact = false; S.slip = false; S.stopped = false;
     trig.classList.remove("is-down");
     render();
   }
@@ -935,31 +994,56 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
     while (bubbles.childElementCount > 5) bubbles.firstElementChild.remove();
   }
 
+  var SCENE_NAMES = ["", "בורג מתברג", "פח דק", "פח עבה"];
+  function paintPanel(){
+    var lit = S.scene || S.speed;
+    $$("[data-speed]").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-speed") === lit)); });
+    stage.style.setProperty("--rot", (S.scene ? SPEEDS[3] : SPEEDS[S.speed - 1]).rot);
+    var ml = $("#modeLine"), ro = $("#readout");
+    if (S.dir === "fwd" && S.scene) {
+      ml.hidden = false; ro.hidden = true;
+      ml.textContent = "SCENES " + S.scene + ": " + SCENE_NAMES[S.scene];
+    } else if (S.dir === "rev") {
+      ml.hidden = false; ro.hidden = false;
+      ml.textContent = S.revSlow ? "שחרור: האטה אוטומטית פעילה" : "שחרור: עבודה רציפה, בלי האטה";
+    } else {
+      ml.hidden = true; ro.hidden = false;
+    }
+  }
   function setSpeed(n, flash){
-    S.speed = n; S.note = "";
-    $$("[data-speed]").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.getAttribute("data-speed") === n)); });
+    S.speed = n; S.note = ""; S.scene = 0;
     var sp = SPEEDS[n - 1];
     $("#rpm").textContent = fmt(sp.rpm);
     $("#ipm").textContent = fmt(sp.ipm);
     $("#nm").textContent = sp.nm;
-    stage.style.setProperty("--rot", sp.rot);
     if (flash) flashEl(panelMark);
+    paintPanel();
     render();
   }
   function flashEl(el){ el.classList.remove("flash"); el.getBoundingClientRect(); el.classList.add("flash"); }
   [dirBtn, panelMark].forEach(function(el){ el.addEventListener("animationend", function(){ el.classList.remove("flash"); }); });
   function setDir(d){
+    if (S.hold && d !== S.dir) { S.note = "dirBusy"; render(); return; }
     S.dir = d; S.note = "";
+    if (d === "rev") S.scene = 0;
     $$("[data-dir]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-dir") === d)); });
     flashEl(dirBtn);
+    paintPanel();
     render();
   }
   $$("[data-speed]").forEach(function(b){ b.addEventListener("click", function(){ setSpeed(+b.getAttribute("data-speed"), true); }); });
   $("#speedModeBtn").addEventListener("click", function(){ setSpeed(S.speed % 4 + 1, true); });
-  $("#scenesBtn").addEventListener("click", function(){ S.note = "scenes"; flashEl(panelMark); render(); });
+  $("#scenesBtn").addEventListener("click", function(){
+    flashEl(panelMark);
+    if (S.dir === "lock") { S.note = "sceneLock"; render(); return; }
+    if (S.dir === "rev") { S.revSlow = !S.revSlow; S.note = S.revSlow ? "revSlowOn" : "revSlowOff"; }
+    else { S.scene = S.scene % 3 + 1; S.note = "scene" + S.scene; }
+    paintPanel();
+    render();
+  });
   $$("[data-dir]").forEach(function(b){ b.addEventListener("click", function(){ setDir(b.getAttribute("data-dir")); }); });
   $("#resetBtn").addEventListener("click", function(){
-    S.d = 0; S.stripped = false; S.seated = 0;
+    S.d = 0; S.stripped = false; S.seated = 0; S.stopped = false; S.note = "";
     if (S.dir === "rev") setDir("fwd"); else render();
   });
 
@@ -1001,13 +1085,13 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
   }
   function updateSound(){
     if (!A) return;
-    var on = S.sound && S.hold && S.dir !== "lock";
+    var on = S.sound && S.hold && S.dir !== "lock" && !S.stopped;
     var hit = on && (S.impact || S.slip);
-    var slow = on && S.dir === "rev" && !S.impact && S.d > 0;
-    var sig = [on, hit, slow, S.speed].join("|");
+    var slow = on && slowNow();
+    var sig = [on, hit, slow, S.speed, S.scene].join("|");
     if (sig === soundSig) return;
     soundSig = sig;
-    var t = A.ctx.currentTime, sp = SPEEDS[S.speed - 1], f = (70 + sp.rpm / 28) * (slow ? .62 : 1);
+    var t = A.ctx.currentTime, sp = S.scene ? SPEEDS[3] : SPEEDS[S.speed - 1], f = (70 + sp.rpm / 28) * (slow ? .62 : 1);
     A.o1.frequency.setTargetAtTime(f, t, .04);
     A.o2.frequency.setTargetAtTime(f * 2.02, t, .04);
     A.lfo.frequency.setTargetAtTime(sp.ipm / 60, t, .04);
@@ -1058,12 +1142,12 @@ section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
   /* ---------- parts ---------- */
   var PARTS = [
     { name: "ראש תפיסה מהיר", text: "כאן נכנסים הביטים: זנב משושה של 1/4 אינץ׳ (6.35 מ״מ). מושכים את הטבעת קדימה, מכניסים או מוציאים ביט, ומשחררים.", a: [150, 92], p: [150, 66] },
-    { name: "פנס LED", text: "נדלק יחד עם ההדק ומאיר את הבורג. אין לו כפתור משלו. שימושי בתוך ארונות ובפינות חשוכות.", a: [216, 154], p: [180, 174] },
-    { name: "מתג כיוון", text: "לחיצה מצד אחד מבריגה, מהצד השני משחררת, ובמצב האמצעי ההדק נעול. לא בטוחים לאיזה צד? לחיצה קצרה באוויר, ומסתכלים לאן הביט מסתובב. בשחרור המברגה מאטה לבד כשהבורג משתחרר, כדי שלא יעוף.", a: [274, 165], p: [320, 190] },
-    { name: "הדק", text: "ככל שלוחצים עמוק יותר, הוא מסתובב מהר יותר, עד המהירות שנבחרה. בתחילת בורג לוחצים בעדינות.", a: [226, 196], p: [186, 214] },
-    { name: "לוח המהירויות", text: "על הבסיס, מלפנים. כל לחיצה על SPEED MODE עוברת למהירות הבאה, והנוריות שבאמצע מראות איזו נבחרה. הכפתור השני, SCENES, מחליף בין מצבי עבודה מוכנים, וליד הנוריות מודפסים הסמלים שלהם.", a: [236, 268], p: [196, 252] },
-    { name: "סוללה ומד טעינה", text: "סוללת ליתיום, 21V ו-2.0Ah, ובערכה יש שתיים. לחיצה על הכפתור שבחזית הסוללה מדליקה ארבעה פסים שמראים כמה טעינה נשארה. התקע העגול של המטען נכנס לשקע הטעינה שבסוללה.", a: [246, 311], p: [252, 346] },
-    { name: "תפס הסוללה", text: "לוחצים עליו ומחליקים את הסוללה החוצה. מכניסים בחזרה עד שנשמע קליק.", a: [223, 292], p: [184, 296] }
+    { name: "פנס LED", text: "נדלק לבד כשלוחצים על ההדק ומאיר את הבורג. אין לו כפתור משלו. שימושי בתוך ארונות ובפינות חשוכות. לא מסתכלים ישר לתוך האור.", a: [216, 154], p: [180, 174] },
+    { name: "מתג כיוון", text: "לחיצה לצד אחד מבריגה, לצד השני משחררת, ובאמצע ההדק נעול. מחליפים כיוון רק כשהמנוע עומד לגמרי: החלפה בזמן סיבוב מזיקה למברגה. כשמניחים את המברגה, משאירים באמצע. לא בטוחים לאיזה צד? לחיצה קצרה באוויר, ומסתכלים לאן הביט מסתובב.", a: [274, 165], p: [320, 190] },
+    { name: "הדק", text: "ככל שלוחצים עמוק יותר, הוא מסתובב מהר יותר, עד המהירות שנבחרה. עוזבים והוא עוצר. בתחילת בורג לוחצים בעדינות. לפני שמכניסים סוללה, בודקים שההדק חוזר למקומו כשעוזבים אותו.", a: [226, 196], p: [186, 214] },
+    { name: "לוח המהירויות", text: "על הבסיס, מלפנים. כל לחיצה על SPEED MODE עוברת לרמת המהירות הבאה, והנוריות מראות איזו נבחרה. SCENES בוחר מצב מיוחד: שלושה בהברגה (בורג מתברג, פח דק, פח עבה) והאטה בשחרור. הלוח כבוי? לוחצים פעם אחת על ההדק והוא נדלק. אחרי שעוזבים את ההדק יש בערך דקה לשנות, ואז הוא נכבה כדי לחסוך בסוללה.", a: [236, 268], p: [196, 252] },
+    { name: "סוללה ומד טעינה", text: "סוללת ליתיום, 21V ו-2.0Ah, ובערכה יש שתיים. לחיצה על הכפתור עם סמל ההפעלה מדליקה ארבעה פסים שמראים כמה טעינה נשארה. התקע העגול של המטען נכנס לשקע הטעינה שבסוללה: הנורית במטען אדומה בזמן טעינה וירוקה כשהסוללה מלאה.", a: [246, 311], p: [252, 346] },
+    { name: "תפס הסוללה", text: "לחיצה ארוכה עליו, ומושכים את הסוללה ישר החוצה. מכניסים בחזרה בחריץ עד שנשמע קליק.", a: [223, 292], p: [184, 296] }
   ];
   var VB = { x: 70, y: 50, w: 290, h: 310 };
   var partsSvg = $("#partsSvg"), partsFig = $("#partsFig"), partChips = $("#partChips");
